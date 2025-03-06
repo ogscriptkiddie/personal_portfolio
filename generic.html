@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Tanish's Portfolio</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Page Wrapper -->
+			<div id="page-wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<h1><a href="index.html">Tanish's Portfolio</a></h1>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<div class="inner">
+							<h2>Menu</h2>
+							<ul class="links">
+								<li><a href="index.html">Home</a></li>
+								<li><a href="generic.html">About Me</a></li>
+							</ul>
+							<a href="#" class="close">Close</a>
+						</div>
+					</nav>
+
+				<!-- Wrapper -->
+					<section id="wrapper">
+						<header>
+							<div class="inner">
+								<h2>A little bit about me</h2>
+							</div>
+						</header>
+
+						<!-- Content -->
+							<div class="wrapper">
+								<div class="inner">
+
+									<h3 class="major">About Me</h3>
+									<p>I am a cybersecurity-focused IT professional with a strong foundation in troubleshooting, network security, and IT service management.<br> With hands-on experience at Aviso Wealth and the University of the Fraser Valley, I have developed expertise in Active Directory management, endpoint security, and system administration.</br>
+
+										In my roles as a Support Analyst and Service Desk Analyst, I have successfully resolved IT incidents with a 95%+ SLA compliance rate, contributed to knowledge base development, and optimized IT workflows to enhance efficiency.<br> I am skilled in cybersecurity frameworks, SIEM management, and risk assessments, ensuring proactive threat mitigation.
+										
+									</br>Holding certifications in CompTIA Security+, Google Cybersecurity, and UBC’s Cybersecurity Strategy & Risk Management, I am committed to leveraging my technical expertise to strengthen organizational security and improve IT operations.</p></p>
+									<h3 class="major">What my holiday looks like</h3>
+									<p>Holidays for me are all about balancing relaxation with adventure. I love spending time with family, especially during celebrations and long weekends. Whether it’s a cozy get-together, exploring new places, or diving into a hobby, I make sure to recharge and enjoy every moment. I also enjoy using this time to pick up new skills, unwind with a good book, or try out something tech-related, like tinkering with new cybersecurity tools. Every holiday is a mix of fun, family, and personal growth.</p>
+
+									<section class="features">
+										<article>
+											<a href="https://github.com/ogscriptkiddie" class="image" target="_blank"><img src="images/pic04.png" alt="Github" /></a>
+											<h3 class="major">My Github</h3>
+											<p>Here is a link to my Github with all the projects that I have worked on.</p>
+											<a href="https://github.com/ogscriptkiddie" class="special" target="_blank">Link to Github</a>
+										</article>
+										<article>
+											<a href="https://www.linkedin.com/in/tanish-rathore" class="image" target="_blank"><img src="images/pic05.png" alt="LinkedIn" /></a>
+											<h3 class="major">My LinkedIn</h3>
+											<p>Let us get connected on LinkedIn!</p>
+											<a href="https://www.linkedin.com/in/tanish-rathore" class="special" target="_blank">Link to LinkedIn</a>
+										</article>
+									</section>
+
+								</div>
+							</div>
+
+					</section>
+
+				<!-- Footer -->
+				<section id="footer">
+					<div class="inner">
+						<h2 class="major">Get in touch</h2>
+						<form action="https://formsubmit.co/59add3f454616cd68040185e2874e3e7" method="POST">
+							<div class="fields">
+								<div class="field">
+									<label for="name">Name</label>
+									<input type="text" name="name" id="name" required />
+								</div>
+								<div class="field">
+									<label for="email">Email</label>
+									<input type="email" name="email" id="email" required />
+								</div>
+								<div class="field">
+									<label for="message">Message</label>
+									<textarea name="message" id="message" rows="4" required></textarea>
+								</div>
+							</div>
+							<ul class="actions">
+								<li><input type="submit" value="Send Message" /></li>
+							</ul>
+						</form>
+					</div>
+				</section>
+				<ul class="contact">
+					<li>
+						<i class="icon solid fa-envelope"></i> 
+						<a href="#" id="email-link">Email Me</a>
+					</li>
+					
+					<script>
+						document.addEventListener("DOMContentLoaded", function () {
+							let encodedEmail = "bm90YWdhaW50YW5pc2hAcHJvdG9uLm1l"; // Base64 encoded email
+							let decodedEmail = atob(encodedEmail); // Decode it
+							let emailLink = document.getElementById("email-link");
+							emailLink.href = "mailto:" + decodedEmail;
+							emailLink.innerText = "Email Me";
+						});
+					</script>					<li><i class="icon brands fa-linkedin"></i> <a href="https://www.linkedin.com/in/tanish-rathore" target="_blank">Visit my LinkedIn</a></li>
+				</ul>
+						</div>
+					</section>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
