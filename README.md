@@ -3,7 +3,7 @@
 Welcome to my personal portfolio website repository! This project showcases my background, skills, work experience, certifications, and projects in the field of IT and Cybersecurity.
 
 ## 📌 Live Demo
-You can view my portfolio website live at: http://ogscriptkiddie.github.io/personal_portfolio/
+You can view my portfolio website live at: https://tanishr.dev
 
 ## 🛠️ Technologies Used
 - **HTML5** - Structuring the content
