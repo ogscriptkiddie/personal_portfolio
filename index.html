@@ -35,7 +35,7 @@
     --body:    'Manrope', sans-serif;
     --mono:    'JetBrains Mono', monospace;
 
-    --ease:   cubic-bezier(.22,1,.36,1);
+    --ease:   cubic-bezier(0.34, 1.56, 0.64, 1);
     --gutter: clamp(1.25rem, 4.5vw, 4.5rem);
 }
 
@@ -131,13 +131,15 @@ nav {
     transition:color .25s, background .25s;
 }
 .nav-a:hover { color:var(--white); background:var(--glass-hi); }
+.nav-a:active { transform:scale(.95); }
 .nav-cta {
     font-family:var(--mono); font-size:.66rem; letter-spacing:.12em; text-transform:uppercase;
     color:var(--void); background:var(--white); text-decoration:none;
     padding:.45rem .95rem; border-radius:99px;
     transition:transform .25s var(--ease), box-shadow .25s;
 }
-.nav-cta:hover { transform:scale(1.05); box-shadow:0 0 24px rgba(0,212,255,.35); }
+.nav-cta:hover { transform:scale(1.05); box-shadow:0 4px 16px rgba(0,0,0,.4); }
+.nav-cta:active { transform:scale(.98); }
 @media (max-width:640px){ .nav-a{display:none} }
 
 /* ═══════════════════════════════════════════════════
@@ -150,7 +152,7 @@ nav {
    HERO
 ═══════════════════════════════════════════════════ */
 #hero {
-    min-height:100svh; position:relative;
+    min-height:100dvh; position:relative;
     display:flex; flex-direction:column; justify-content:center;
     padding-top:5.5rem;
 }
@@ -193,7 +195,7 @@ nav {
     margin-top:2.8rem;
     display:flex; align-items:flex-end; justify-content:space-between; gap:2.5rem; flex-wrap:wrap;
 }
-.hero-p { max-width:33em; color:var(--grey); font-size:1.02rem; }
+.hero-p { max-width:33em; color:var(--grey); font-size:1.02rem; text-wrap:pretty; }
 .hero-p b { color:var(--white); font-weight:600; }
 
 .hero-actions { display:flex; gap:.8rem; flex-wrap:wrap; }
@@ -219,22 +221,6 @@ nav {
 }
 .hero-bottom .wrap { display:flex; justify-content:space-between; align-items:center; padding-top:1rem; padding-bottom:1rem; gap:1rem; }
 @media (max-width:640px){ .hero-bottom .mono:last-child{display:none} }
-
-/* ═══════════════════════════════════════════════════
-   MARQUEE
-═══════════════════════════════════════════════════ */
-.marquee {
-    border-bottom:1px solid var(--stroke);
-    overflow:hidden; padding:1.1rem 0;
-    display:flex; user-select:none;
-}
-.marquee-track { display:flex; gap:2.8rem; flex-shrink:0; align-items:center; animation:scroll 30s linear infinite; padding-right:2.8rem; }
-@keyframes scroll { to { transform:translateX(-100%); } }
-.marquee span {
-    font-family:var(--display); font-weight:700; font-size:.95rem; letter-spacing:.02em;
-    color:var(--dim); white-space:nowrap;
-}
-.marquee i { font-style:normal; background:var(--grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; font-size:.8rem; }
 
 /* ═══════════════════════════════════════════════════
    SECTION SHELL
@@ -295,6 +281,7 @@ h2 i { font-style:normal; background:var(--grad); -webkit-background-clip:text; 
 .b-kicker { font-family:var(--mono); font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color:var(--c2); display:block; margin-bottom:1rem; }
 
 .b-stat b {
+    font-variant-numeric:tabular-nums;
     font-family:var(--display); font-weight:800; font-size:2rem; letter-spacing:-0.02em; line-height:1;
     background:var(--grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
 }
@@ -326,10 +313,10 @@ h2 i { font-style:normal; background:var(--grad); -webkit-background-clip:text; 
 .xp { display:flex; flex-direction:column; gap:.9rem; }
 .xp-item { padding:1.7rem 2rem; display:grid; grid-template-columns:170px 1fr auto; gap:1.6rem; align-items:start; transition:transform .35s var(--ease); }
 .xp-item:hover { transform:translateX(6px); }
-.xp-when { font-family:var(--mono); font-size:.68rem; letter-spacing:.1em; color:var(--dim); padding-top:.4rem; }
+.xp-when { font-variant-numeric: tabular-nums; font-family:var(--mono); font-size:.68rem; letter-spacing:.1em; color:var(--dim); padding-top:.4rem; }
 .xp-what h3 { font-family:var(--display); font-weight:700; font-size:1.12rem; letter-spacing:-0.01em; }
 .xp-what .co { font-size:.82rem; color:var(--c2); font-family:var(--mono); margin:.2rem 0 .6rem; }
-.xp-what p { font-size:.88rem; color:var(--grey); max-width:52em; }
+.xp-what p { text-wrap: pretty; font-size:.88rem; color:var(--grey); max-width:52em; }
 .xp-now {
     font-family:var(--mono); font-size:.6rem; letter-spacing:.14em; text-transform:uppercase;
     color:#39e58c; border:1px solid rgba(57,229,140,.3); background:rgba(57,229,140,.08);
@@ -343,11 +330,13 @@ h2 i { font-style:normal; background:var(--grad); -webkit-background-clip:text; 
 .pj-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
 .pj { padding:2.1rem; text-decoration:none; display:flex; flex-direction:column; min-height:280px; transition:transform .4s var(--ease); }
 .pj:hover { transform:translateY(-5px); }
+.pj:active { transform:scale(.98); }
 .pj-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:auto; }
 .pj-id { font-family:var(--mono); font-size:.66rem; letter-spacing:.16em; color:var(--dim); }
 .pj-arrow { width:36px; height:36px; border-radius:50%; border:1px solid var(--stroke); display:grid; place-items:center; color:var(--grey); transition:all .35s var(--ease); }
 .pj-arrow svg { width:14px; height:14px; }
 .pj:hover .pj-arrow { background:var(--grad); border-color:transparent; color:#fff; transform:rotate(45deg); }
+.pj:active { transform:scale(.98); }
 .pj h3 { font-family:var(--display); font-weight:700; font-size:1.5rem; letter-spacing:-0.02em; margin:2.2rem 0 .6rem; color:var(--white); }
 .pj p { font-size:.87rem; color:var(--grey); margin-bottom:1.4rem; }
 .pj-tags { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:auto; }
@@ -446,6 +435,7 @@ h2 i { font-style:normal; background:var(--grad); -webkit-background-clip:text; 
 .cred-col { display:flex; flex-direction:column; gap:.9rem; }
 .cred { padding:1.5rem 1.8rem; display:flex; align-items:center; gap:1.2rem; text-decoration:none; transition:transform .35s var(--ease); }
 a.cred:hover { transform:translateX(6px); }
+.cred:active { transform:scale(.98); }
 .cred-ico { width:42px; height:42px; border-radius:12px; flex:0 0 auto; display:grid; place-items:center; background:rgba(109,91,255,.12); border:1px solid rgba(109,91,255,.3); color:var(--c2); }
 .cred-ico svg { width:19px; height:19px; }
 .cred .t { font-family:var(--display); font-weight:700; font-size:.98rem; color:var(--white); }
@@ -590,7 +580,6 @@ footer a:hover { color:var(--c2); }
     html { scroll-behavior:auto; }
     *,*::before,*::after { animation:none !important; transition:none !important; }
     .reveal { opacity:1; transform:none; }
-    .marquee-track { animation:none; }
 }
 </style>
 </head>
@@ -616,14 +605,17 @@ footer a:hover { color:var(--c2); }
     <a class="nav-a" href="#skills">Skills</a>
     <a class="nav-a" href="#darkroom">Darkroom</a>
     <a class="nav-cta" href="#contact">Contact</a>
-</nav>
+<button id="nav-toggle" class="nav-toggle" aria-label="Open navigation" aria-expanded="false" onclick="toggleNav(this)"><span></span><span></span><span></span></button>
+<div id="nav-drawer" class="nav-drawer" aria-hidden="true"><a href="#about">About</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#lab">Lab</a><a href="#skills">Skills</a><a href="#darkroom">Darkroom</a><a href="#contact">Contact</a><a href="#contact" class="nav-cta-mobile">Say hello</a></div>
+<style>.nav-toggle{display:none;background:none;border:none;padding:.5rem;cursor:pointer;z-index:92;position:relative;}.nav-toggle span{display:block;width:22px;height:2px;background:#fff;margin:4px 0;transition:.2s;}.nav-drawer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:rgba(10,12,18,.98);backdrop-filter:blur(24px);flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;z-index:90;}.nav-drawer a{color:#fff;font-family:Syne,sans-serif;font-size:1.3rem;text-decoration:none;opacity:.9;}.nav-drawer.open{display:flex;}.nav-drawer a:hover{opacity:1;}.nav-cta-mobile{background:linear-gradient(135deg,#7c3aed,#ec4899);padding:.55rem 1rem;border-radius:9999px;color:#fff;font-weight:600;text-decoration:none;}.nav-cta-mobile:hover{opacity:.9;}.nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg);}.nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0;}.nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}@media(max-width:640px){.nav-toggle{display:block;}.nav-a{display:none !important;}.nav-drawer{display:none;}}@media(max-width:640px){.nav-drawer.open{display:flex;}}</style>
+<style>.lab-para{max-height:6rem;overflow:hidden;transition:max-height .3s ease;}.lab-para.open{max-height:1000px;}.lab-btn{background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.35);color:#ddd;padding:.35rem .9rem;border-radius:9999px;font-family:Syne,sans-serif;font-size:.85rem;cursor:pointer;margin-top:.75rem;}.lab-btn:hover{background:rgba(124,58,237,.4);}</style><script>function toggleNav(btn){const d=document.getElementById('nav-drawer');const open=d.classList.toggle('open');btn.setAttribute('aria-expanded',open?'true':'false');d.setAttribute('aria-hidden',open?'false':'true');if(open){document.body.style.overflow='hidden';}else{document.body.style.overflow='';}}</script></nav>
 
 <!-- HERO -->
 <section id="hero">
     <canvas id="dots" aria-hidden="true"></canvas>
     <div class="wrap">
         <div class="hero-tag reveal in"><span class="pulse"></span>Open to opportunities · Vancouver, BC</div>
-        <h1 class="hero-h reveal in">
+        <h1 class="hero-h reveal in" aria-label="TANISH RATHORE — Cybersecurity Professional">
             <span class="ghost">TANISH</span>
             <span class="lit">RATHORE</span>
         </h1>
@@ -646,62 +638,6 @@ footer a:hover { color:var(--c2); }
         <div class="wrap">
             <span class="mono">Scroll ↓</span>
             <span class="mono">SIEM · Threat Detection · Endpoint Hardening · CTF</span>
-        </div>
-    </div>
-</section>
-
-<!-- MARQUEE -->
-<div class="marquee" aria-hidden="true">
-    <div class="marquee-track">
-        <span>Azure Sentinel</span><i>✦</i><span>KQL</span><i>✦</i><span>Elastic SIEM</span><i>✦</i>
-        <span>Threat Intelligence</span><i>✦</i><span>Incident Response</span><i>✦</i><span>Hack The Box</span><i>✦</i>
-        <span>NIST</span><i>✦</i><span>ISO 27001</span><i>✦</i><span>Nmap</span><i>✦</i><span>Proxmox</span><i>✦</i>
-    </div>
-    <div class="marquee-track">
-        <span>Azure Sentinel</span><i>✦</i><span>KQL</span><i>✦</i><span>Elastic SIEM</span><i>✦</i>
-        <span>Threat Intelligence</span><i>✦</i><span>Incident Response</span><i>✦</i><span>Hack The Box</span><i>✦</i>
-        <span>NIST</span><i>✦</i><span>ISO 27001</span><i>✦</i><span>Nmap</span><i>✦</i><span>Proxmox</span><i>✦</i>
-    </div>
-</div>
-
-<!-- ABOUT — BENTO -->
-<section id="about">
-    <div class="wrap">
-        <div class="sec-head reveal">
-            <span class="sec-num">01</span>
-            <h2>About <i>me.</i></h2>
-        </div>
-        <div class="bento">
-            <div class="g b-intro reveal">
-                <span class="b-kicker">// Profile</span>
-                <p>I'm pursuing my <b>Master's in Cybersecurity at Simon Fraser University</b> while working as a Systems &amp; Security Technician at TLC Solutions in Langley, BC — keeping fleets of endpoints monitored, patched, and hardened.</p>
-                <p>Three years of hands-on work across a university IT environment and a national wealth-management firm built my foundation in <b>SIEM operations, threat detection, and risk assessment</b>. Off the clock: custom PCs, analog film, BC trails.</p>
-            </div>
-            <div class="g b-terminal reveal">
-                <div class="term-head"><i></i><i></i><i></i><span>tanish@sfu — zsh</span></div>
-                <div class="term-body">
-                    <div><span class="tp">~$</span> <span class="tw">cat profile.json</span></div>
-                    <div class="td">{</div>
-                    <div>&nbsp;&nbsp;<span class="tk">"role"</span>: <span class="tv">"Systems &amp; Security Technician"</span>,</div>
-                    <div>&nbsp;&nbsp;<span class="tk">"education"</span>: <span class="tv">"MS Cybersecurity — SFU"</span>,</div>
-                    <div>&nbsp;&nbsp;<span class="tk">"focus"</span>: [</div>
-                    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tv">"Threat Detection"</span>,</div>
-                    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tv">"SIEM / SOC Operations"</span>,</div>
-                    <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tv">"Endpoint Hardening"</span></div>
-                    <div>&nbsp;&nbsp;],</div>
-                    <div>&nbsp;&nbsp;<span class="tk">"ctf"</span>: <span class="tb">true</span>,</div>
-                    <div>&nbsp;&nbsp;<span class="tk">"open_to_work"</span>: <span class="tb">true</span></div>
-                    <div class="td">}</div>
-                    <div style="margin-top:.4rem"><span class="tp">~$</span> <span class="caret"></span></div>
-                </div>
-            </div>
-            <div class="g b-stat reveal"><b>3+</b><span>Years experience</span></div>
-            <div class="g b-stat reveal"><b>1K+</b><span>Users supported</span></div>
-            <div class="g b-stat reveal"><b>200+</b><span>Endpoints hardened</span></div>
-            <div class="g b-htb reveal">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L3 7v6c0 5 4 8.4 9 9 5-.6 9-4 9-9V7l-9-5z"/><path d="M9 12l2 2 4-4"/></svg>
-                <p><b>Hack The Box</b> competitor running a production-grade homelab with 25+ services behind a zero-inbound-ports architecture — see <a href="#lab" style="color:var(--c2)">The Lab</a>.</p>
-            </div>
         </div>
     </div>
 </section>
@@ -813,7 +749,7 @@ footer a:hover { color:var(--c2); }
             <div class="net-map" aria-label="Home server architecture: internet traffic flows through Cloudflare Tunnel to Traefik with CrowdSec and Let's Encrypt, then splits into a public zone (Jellyfin, request services) and a private zone (Tailscale VPN, Authelia SSO, AdGuard DNS, Grafana, Vaultwarden)">
                 <div class="node">INTERNET<small>zero inbound ports</small></div>
                 <div class="pipe"></div>
-                <div class="node gate">CLOUDFLARE TUNNEL<small>no exposed surface</small></div>
+                <div class="node gate">CLOUDFLARE TUNNEL<small>no exposed surface</small></div><div class="lab-legend" aria-label="Lab architecture legend"><span>● Active flow</span> <span>● Zone boundary</span> <span>● Packet</span></div>
                 <div class="pipe"></div>
                 <div class="node proxy">TRAEFIK<small>TLS · Let's Encrypt DNS-01 · CrowdSec IPS</small></div>
                 <div class="zone-split">
@@ -1206,5 +1142,20 @@ function tick() {
 tick(); setInterval(tick, 30000);
 </script>
 <!-- built 2026 -->
-</body>
+
+<script>
+function handleFormSubmit(form, e) {
+  e.preventDefault();
+  const btn = form.querySelector('button[type="submit"]');
+  const status = form.querySelector('.form-status') || document.createElement('div');
+  if (!form.querySelector('.form-status')) { status.className='form-status'; status.setAttribute('aria-live','polite'); form.insertBefore(status, btn); }
+  btn.disabled = true; btn.textContent = 'Sending...';
+  const data = new FormData(form);
+  fetch('https://formsubmit.co/59add3f...', {method:'POST', body:data, mode:'no-cors'})
+    .then(()=>{ status.textContent='Message sent. I will reply within 48 hours.'; status.style.color='#6ee7b7'; btn.textContent='Sent'; })
+    .catch(()=>{ status.textContent='Send failed. Please try again.'; status.style.color='#ff6b6b'; btn.disabled=false; btn.textContent='Send message'; });
+  return false;
+}
+</script>
+<script>function openLab(btn){const p=btn.previousElementSibling||btn.parentElement.querySelector(".lab-para");if(p){p.classList.toggle("open");btn.textContent=p.classList.contains("open")?"Collapse details":"Read more";}}</script></body>
 </html>
