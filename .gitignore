@@ -1,0 +1,12 @@
+# Backups and temporary files
+*backup*
+*.tmp
+.DS_Store
+
+# Tool assessment and critique artifacts
+.impeccable/
+critique_meta.json
+assessment_a_*.md
+
+# Local environment notes
+PROJECT_CONTEXT.md

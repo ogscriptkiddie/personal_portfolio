@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Résumé — Tanish Rathore</title>
+    <meta name="description" content="Résumé of Tanish Rathore, Technical Support Specialist at Fortinet (FortiEDR). Endpoint security, incident response, SIEM, zero-trust infrastructure.">
+    <link rel="canonical" href="https://tanishr.dev/resume.html">
+    <meta name="theme-color" content="#0b0c0e">
+
+    <!-- Open Graph & Twitter -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Résumé — Tanish Rathore">
+    <meta property="og:description" content="Technical Support Specialist at Fortinet (FortiEDR). Detection work in Microsoft Sentinel and KQL, and a homelab with zero open inbound ports.">
+    <meta property="og:url" content="https://tanishr.dev/resume.html">
+    <meta property="og:image" content="https://tanishr.dev/images/og.png">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Icons -->
+    <link rel="icon" type="image/png" href="images/cyber-security.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="images/icon-180.png">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #0b0c0e;
+            --surface: #14161a;
+            --line: rgba(236, 235, 230, 0.12);
+            --text: #ecebe6;
+            --text-muted: #a6a59e;
+            --accent: #ff5a1f;
+            --accent-ink: #0b0c0e;
+            --radius: 3px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: "Archivo", sans-serif;
+            font-weight: 400;
+            font-stretch: 100%;
+            font-size: 1rem;
+            line-height: 1.6;
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 64px 24px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: var(--accent-ink);
+        }
+
+        a:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+        }
+
+        .resume-container {
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 36px;
+        }
+
+        h1 {
+            font-family: "Archivo", sans-serif;
+            font-weight: 800;
+            font-stretch: 62%;
+            font-size: 3rem;
+            line-height: 1;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .header-sub {
+            font-family: "Archivo", sans-serif;
+            font-weight: 500;
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .header-links {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .text-link {
+            font-family: "JetBrains Mono", monospace;
+            color: var(--text);
+            text-decoration: underline;
+            text-decoration-color: var(--accent);
+            text-underline-offset: 4px;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            transition: color 0.2s;
+        }
+
+        .text-link:hover {
+            color: var(--accent);
+        }
+
+        .sec-h {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.82rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 6px;
+            margin: 40px 0 18px;
+        }
+
+        .summary-p {
+            font-size: 1.05rem;
+            color: var(--text);
+            line-height: 1.65;
+        }
+
+        .role {
+            margin-bottom: 24px;
+        }
+
+        .role-date {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        h3.role-title {
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--text);
+            margin-top: 2px;
+        }
+
+        .role-company {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        ul.bullets {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        ul.bullets li {
+            font-size: 0.98rem;
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        h4.metric {
+            font-family: "Archivo", sans-serif;
+            font-weight: 800;
+            font-stretch: 62%;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            color: var(--text);
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .proj-item {
+            margin-bottom: 14px;
+            font-size: 0.98rem;
+            line-height: 1.5;
+        }
+
+        .proj-title {
+            font-family: "Archivo", sans-serif;
+            font-weight: 800;
+            font-stretch: 62%;
+            text-transform: uppercase;
+            color: var(--text);
+        }
+
+        .skills-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .skill-row {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .skill-name {
+            font-family: "Archivo", sans-serif;
+            font-weight: 800;
+            font-stretch: 62%;
+            text-transform: uppercase;
+            color: var(--text);
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .skill-val {
+            color: var(--text-muted);
+        }
+
+        .plain-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .plain-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 16px;
+            border-bottom: 1px dashed var(--line);
+            padding-bottom: 6px;
+        }
+
+        .plain-left {
+            font-size: 0.98rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .plain-right {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 40px 20px;
+            }
+
+            h1 {
+                font-size: 2.25rem;
+            }
+
+            .plain-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+
+            .plain-right {
+                text-align: left;
+                white-space: normal;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="resume-container">
+        <header>
+            <h1>Tanish Rathore</h1>
+            <div class="header-sub">Technical Support Specialist, FortiEDR · Vancouver, BC</div>
+            <nav class="header-links">
+                <a href="index.html" class="text-link">← Back to site</a>
+                <a href="index.html#contact" class="text-link">Get in touch</a>
+                <a href="https://www.linkedin.com/in/tanish-rathore" target="_blank" rel="noopener" class="text-link">LinkedIn ↗</a>
+            </nav>
+        </header>
+
+        <!-- 1. SUMMARY -->
+        <section>
+            <h2 class="sec-h">Summary</h2>
+            <p class="summary-p">
+                Cybersecurity engineer dedicated to defensive operations, SIEM analytics, and zero-trust perimeter defense. Working customer cases on enterprise FortiEDR deployments and hardening infrastructure against evolving adversary tactics.
+            </p>
+        </section>
+
+        <!-- 2. EXPERIENCE -->
+        <section>
+            <h2 class="sec-h">Experience</h2>
+
+            <!-- Fortinet -->
+            <article class="role">
+                <div class="role-date">Oct 2026 – Present</div>
+                <h3 class="role-title">Technical Support Specialist</h3>
+                <div class="role-company">Fortinet · Burnaby, BC</div>
+                <ul class="bullets">
+                    <li>
+                        <h4 class="metric">FORTIEDR TROUBLESHOOTING</h4>
+                        Work customer cases on FortiEDR deployments, from first report through to resolution.
+                    </li>
+                    <li>
+                        <h4 class="metric">BUG COORDINATION</h4>
+                        Escalate confirmed product defects to engineering and track each one through to a fix.
+                    </li>
+                </ul>
+            </article>
+
+            <!-- TLC Solutions -->
+            <article class="role">
+                <div class="role-date">Apr 2025 – 2026</div>
+                <h3 class="role-title">Systems and Security Technician</h3>
+                <div class="role-company">TLC Solutions · Langley, BC</div>
+                <ul class="bullets">
+                    <li>
+                        <h4 class="metric">200+ ENDPOINTS, MANY TENANTS</h4>
+                        Triage network and endpoint security alerts across client fleets, drive patch and configuration compliance, and hardened 200+ endpoints through a fleet-wide refresh.
+                    </li>
+                    <li>
+                        <h4 class="metric">STANDARDIZED PLAYBOOKS</h4>
+                        Documented standard operating incident procedures in Confluence and SharePoint, elevating overall incident readiness.
+                    </li>
+                </ul>
+            </article>
+
+            <!-- UFV -->
+            <article class="role">
+                <div class="role-date">[CONFIRM: dates]</div>
+                <h3 class="role-title">Service Desk Analyst I</h3>
+                <div class="role-company">University of the Fraser Valley · Abbotsford, BC</div>
+                <p style="font-size:0.98rem; color:var(--text); line-height:1.55;">
+                    Supported 1,000+ users and ran campus OS upgrade cycles. Managed devices and access through Intune, Active Directory, SCCM and Exchange. Built security awareness training for faculty and staff, which cut escalations by about 30%.
+                </p>
+            </article>
+
+            <!-- Aviso Wealth -->
+            <article class="role">
+                <div class="role-date">[CONFIRM: dates]</div>
+                <h3 class="role-title">Summer IT Intern</h3>
+                <div class="role-company">Aviso Wealth · Vancouver, BC</div>
+                <p style="font-size:0.98rem; color:var(--text); line-height:1.55;">
+                    Trained in enterprise IT operations and assisted the Level 3 team with issue resolution.
+                </p>
+            </article>
+        </section>
+
+        <!-- 3. PROJECTS -->
+        <section>
+            <h2 class="sec-h">Projects</h2>
+            <div class="proj-item">
+                <span class="proj-title">SENTINEL HONEYPOT:</span> Live global threat detection pipeline deployed on Microsoft Azure Sentinel with custom KQL analytics mapping malicious attack vectors worldwide.
+            </div>
+            <div class="proj-item">
+                <span class="proj-title">SOC SIMULATOR:</span> Purpose-built Security Operations Center laboratory for incident response drills, adversary emulation, and Elastic SIEM detection tuning.
+            </div>
+            <div class="proj-item">
+                <span class="proj-title">CLAUSEGUARD:</span> AI-assisted terms-of-service and privacy policy analyzer flagging high-risk clauses prior to user acceptance.
+            </div>
+            <div class="proj-item">
+                <span class="proj-title">FORTRESS:</span> Production-grade home server environment orchestrating 25+ containerized services with zero exposed inbound ports via Cloudflare Tunnels and CrowdSec IPS.
+            </div>
+        </section>
+
+        <!-- 4. SKILLS -->
+        <section>
+            <h2 class="sec-h">Skills</h2>
+            <div class="skills-list">
+                <div class="skill-row">
+                    <span class="skill-name">SECURITY &amp; INCIDENT RESPONSE</span>
+                    <span class="skill-val">FortiEDR, Azure Sentinel, Elastic SIEM, KQL, Threat Intelligence, Alert Triage, Incident Response</span>
+                </div>
+                <div class="skill-row">
+                    <span class="skill-name">SYSTEMS &amp; ENDPOINT ADMIN</span>
+                    <span class="skill-val">Active Directory, Azure AD, Microsoft Intune, SCCM, Exchange, Proxmox VE, VMware</span>
+                </div>
+                <div class="skill-row">
+                    <span class="skill-name">NETWORKING &amp; INFRASTRUCTURE</span>
+                    <span class="skill-val">Cloudflare Tunnels, Traefik, CrowdSec, Tailscale, AdGuard Home, Docker Compose, Linux</span>
+                </div>
+                <div class="skill-row">
+                    <span class="skill-name">FRAMEWORKS &amp; AUDITING</span>
+                    <span class="skill-val">NIST CSF, ISO 27001, Nmap, Network Segmentation, SOPS + age encryption, Restic</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. CERTIFICATIONS -->
+        <section>
+            <h2 class="sec-h">Certifications</h2>
+            <div class="plain-list">
+                <div class="plain-row">
+                    <span class="plain-left">CompTIA Security+</span>
+                    <span class="plain-right">CompTIA</span>
+                </div>
+                <div class="plain-row">
+                    <span class="plain-left">Google Cybersecurity</span>
+                    <span class="plain-right">Google</span>
+                </div>
+                <div class="plain-row">
+                    <span class="plain-left">Cybersecurity Strategy &amp; Risk</span>
+                    <span class="plain-right">University of British Columbia</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. EDUCATION -->
+        <section>
+            <h2 class="sec-h">Education</h2>
+            <div class="plain-list">
+                <div class="plain-row">
+                    <span class="plain-left">MSc, Cybersecurity (in progress)</span>
+                    <span class="plain-right">Simon Fraser University</span>
+                </div>
+                <div class="plain-row">
+                    <span class="plain-left">BCIS, Major in Cybersecurity</span>
+                    <span class="plain-right">University of the Fraser Valley, 2024</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

@@ -1,1160 +1,1951 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tanish Rathore — Cybersecurity</title>
-<meta name="description" content="Tanish Rathore — cybersecurity professional in Vancouver, BC. SIEM, threat detection, endpoint hardening.">
-<link rel="icon" type="image/png" href="images/cyber-security.png" sizes="32x32">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=Manrope:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>document.documentElement.classList.add('js');</script>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Tanish Rathore — Endpoint Security and Detection</title>
+    <meta name="description" content="Technical Support Specialist at Fortinet (FortiEDR). Detection work in Microsoft Sentinel and KQL, and a homelab with zero open inbound ports.">
+    <link rel="canonical" href="https://tanishr.dev/">
+    <meta name="theme-color" content="#0b0c0e">
 
-<style>
-/* ═══════════════════════════════════════════════════
-   TOKENS
-═══════════════════════════════════════════════════ */
-:root {
-    --void:      #05050a;
-    --void-2:    #0a0a14;
-    --glass:     rgba(255,255,255,0.035);
-    --glass-hi:  rgba(255,255,255,0.07);
-    --stroke:    rgba(255,255,255,0.08);
-    --stroke-hi: rgba(255,255,255,0.18);
-    --white:     #f2f2f7;
-    --grey:      #9d9dad;
-    --dim:       #55556a;
+    <!-- Open Graph & Twitter -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Tanish Rathore — Endpoint Security and Detection">
+    <meta property="og:description" content="Technical Support Specialist at Fortinet (FortiEDR). Detection work in Microsoft Sentinel and KQL, and a homelab with zero open inbound ports.">
+    <meta property="og:url" content="https://tanishr.dev/">
+    <meta property="og:image" content="https://tanishr.dev/images/og.png">
+    <meta name="twitter:card" content="summary_large_image">
 
-    --c1: #6d5bff;   /* violet   */
-    --c2: #00d4ff;   /* cyan     */
-    --c3: #ff4ecd;   /* magenta  */
+    <!-- Icons -->
+    <link rel="icon" type="image/png" href="images/cyber-security.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="images/icon-180.png">
 
-    --grad: linear-gradient(120deg, var(--c2), var(--c1) 50%, var(--c3));
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Tanish Rathore",
+      "jobTitle": "Technical Support Specialist",
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Fortinet"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Vancouver"
+      },
+      "url": "https://tanishr.dev/",
+      "sameAs": [
+        "https://www.linkedin.com/in/tanish-rathore"
+      ]
+    }
+    </script>
 
-    --display: 'Syne', sans-serif;
-    --body:    'Manrope', sans-serif;
-    --mono:    'JetBrains Mono', monospace;
+    <!-- Google Fonts: Single variable Archivo family + JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 
-    --ease:   cubic-bezier(0.16, 1, 0.3, 1);
-    --gutter: clamp(1.25rem, 4.5vw, 4.5rem);
-}
+    <!-- GSAP (No ScrollTrigger needed in Batch 5) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 
-*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
+    <style>
+        @property --accent {
+            syntax: '<color>';
+            inherits: true;
+            initial-value: #ff5a1f;
+        }
 
-body {
-    background: var(--void);
-    color: var(--white);
-    font-family: var(--body);
-    line-height: 1.65;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-}
+        :root {
+            --bg: #0b0c0e;          /* warm near-black */
+            --surface: #14161a;     /* cards, HUD, inputs */
+            --line: rgba(236, 235, 230, 0.12);
+            --text: #ecebe6;        /* warm off-white */
+            --text-muted: #a6a59e;  /* high-contrast muted text >= 4.5:1 */
+            --accent: #ff5a1f;      /* dynamic per-stop accent */
+            --accent-ink: #0b0c0e;  /* text on accent */
+            --ok: #3fb97f;          /* form success only */
+            --err: #e5484d;         /* form error only */
+            --radius: 3px;
+            --col: 600px;           /* text column width */
+        }
 
-::selection { background: var(--c1); color:#fff; }
-::-webkit-scrollbar { width:5px; }
-::-webkit-scrollbar-track { background:var(--void); }
-::-webkit-scrollbar-thumb { background:#26263a; border-radius:3px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-:focus-visible { outline:1.5px solid var(--c2); outline-offset:3px; border-radius:4px; }
+        html {
+            height: 100%;
+            transition: --accent 0.9s ease;
+        }
 
-.wrap { max-width:1280px; margin:0 auto; padding:0 var(--gutter); }
+        body {
+            font-family: "Archivo", sans-serif;
+            font-weight: 400;
+            font-stretch: 100%;
+            font-size: 1.0625rem;
+            line-height: 1.6;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            min-height: 100%;
+            -webkit-font-smoothing: antialiased;
+        }
 
-.mono {
-    font-family:var(--mono); font-size:.7rem;
-    letter-spacing:.16em; text-transform:uppercase; color:var(--dim);
-}
+        ::selection {
+            background: var(--accent);
+            color: var(--accent-ink);
+        }
 
-/* ═══════════════════════════════════════════════════
-   BACKDROP — aurora blobs + grain + grid
-═══════════════════════════════════════════════════ */
-.backdrop { position:fixed; inset:0; z-index:-2; overflow:hidden; background:var(--void); }
+        /* Screen reader utility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip-path: inset(50%);
+            white-space: nowrap;
+        }
 
-.blob { position:absolute; border-radius:50%; filter:blur(110px); opacity:.5; will-change:transform; }
-.blob-1 { width:52vw; height:52vw; background:radial-gradient(circle, rgba(109,91,255,.5), transparent 65%); top:-18vw; left:-12vw; animation:drift1 26s ease-in-out infinite alternate; }
-.blob-2 { width:44vw; height:44vw; background:radial-gradient(circle, rgba(0,212,255,.32), transparent 65%); top:30vh; right:-16vw; animation:drift2 32s ease-in-out infinite alternate; }
-.blob-3 { width:38vw; height:38vw; background:radial-gradient(circle, rgba(255,78,205,.25), transparent 65%); bottom:-14vw; left:22vw; animation:drift3 38s ease-in-out infinite alternate; }
+        /* Skip link */
+        .skip-link {
+            position: absolute;
+            top: -100px;
+            left: 20px;
+            background: var(--accent);
+            color: var(--accent-ink);
+            padding: 10px 16px;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.85rem;
+            font-weight: 600;
+            z-index: 9999;
+            text-decoration: none;
+            border-radius: var(--radius);
+            transition: top 0.2s ease;
+        }
 
-@keyframes drift1 { to { transform:translate(9vw,7vh) scale(1.15); } }
-@keyframes drift2 { to { transform:translate(-8vw,-9vh) scale(.9); } }
-@keyframes drift3 { to { transform:translate(6vw,-6vh) scale(1.2); } }
+        .skip-link:focus {
+            top: 20px;
+        }
 
-.gridlines {
-    position:absolute; inset:0;
-    background-image:
-        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
-    background-size:72px 72px;
-    mask-image: radial-gradient(ellipse 90% 65% at 50% 0%, black 30%, transparent 78%);
-    -webkit-mask-image: radial-gradient(ellipse 90% 65% at 50% 0%, black 30%, transparent 78%);
-}
+        /* Focus visible on interactive elements */
+        a:focus-visible,
+        button:focus-visible,
+        input:focus-visible,
+        textarea:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+        }
 
-.grain { position:fixed; inset:-50%; z-index:2000; pointer-events:none; opacity:.05;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-    animation: grain 8s steps(10) infinite;
-}
-@keyframes grain {
-    0%,100%{transform:translate(0,0)} 10%{transform:translate(-5%,-8%)} 20%{transform:translate(-12%,3%)}
-    30%{transform:translate(6%,-10%)} 40%{transform:translate(-4%,12%)} 50%{transform:translate(-10%,4%)}
-    60%{transform:translate(12%,0)} 70%{transform:translate(0,10%)} 80%{transform:translate(-12%,0)} 90%{transform:translate(8%,4%)}
-}
+        /* Fixed 3D WebGL Canvas Container */
+        #three-canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            height: 100lvh;
+            z-index: 0;
+            pointer-events: none;
+            transition: opacity 0.15s linear;
+        }
 
-/* scroll progress */
-.progress { position:fixed; top:0; left:0; height:2px; width:0; background:var(--grad); z-index:1500; }
+        .no-webgl #three-canvas-container {
+            background: radial-gradient(circle at 30% 40%, #1a1c22, #0b0c0e 70%);
+        }
 
-/* ═══════════════════════════════════════════════════
-   NAV — floating glass pill
-═══════════════════════════════════════════════════ */
-nav {
-    position:fixed; top:1.1rem; left:50%; transform:translateX(-50%);
-    z-index:1000;
-    display:flex; align-items:center; gap:.4rem;
-    padding:.45rem .55rem;
-    background:rgba(10,10,20,.55);
-    border:1px solid var(--stroke);
-    border-radius:99px;
-    backdrop-filter:blur(20px) saturate(1.4);
-    -webkit-backdrop-filter:blur(20px) saturate(1.4);
-    box-shadow:0 8px 32px rgba(5,5,15,.6);
-    max-width:calc(100vw - 2rem);
-}
-.nav-logo {
-    font-family:var(--display); font-weight:800; font-size:.88rem;
-    text-decoration:none; color:var(--white);
-    padding:.35rem .9rem;
-}
-.nav-logo b { background:var(--grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
-.nav-a {
-    font-family:var(--mono); font-size:.66rem; letter-spacing:.12em; text-transform:uppercase;
-    color:var(--grey); text-decoration:none;
-    padding:.45rem .85rem; border-radius:99px;
-    transition:color .25s, background .25s;
-}
-.nav-a:hover { color:var(--white); background:var(--glass-hi); }
-.nav-a:active { transform:scale(.95); }
-.nav-cta {
-    font-family:var(--mono); font-size:.66rem; letter-spacing:.12em; text-transform:uppercase;
-    color:var(--void); background:var(--white); text-decoration:none;
-    padding:.45rem .95rem; border-radius:99px;
-    transition:transform .25s var(--ease), box-shadow .25s;
-}
-.nav-cta:hover { transform:scale(1.05); box-shadow:0 4px 16px rgba(5,5,15,.6); }
-.nav-cta:active { transform:scale(.98); }
-@media (max-width:640px){ .nav-a{display:none} }
+        /* Text starts below the shape band (Stacked layout) */
+        .stepped.stacked .panel { padding-top: calc(34vh + 12px); padding-top: calc(34dvh + 12px); }
+        .stepped.stacked .panel .section-content { margin-block: 0 auto; }   /* top-aligned under the band */
+        .stepped.stacked #hero .section-content { text-align: left; }
 
-/* ═══════════════════════════════════════════════════
-   REVEAL
-═══════════════════════════════════════════════════ */
-.reveal { opacity:0; transform:translateY(30px); transition:opacity .9s var(--ease), transform .9s var(--ease); }
-.reveal.in { opacity:1; transform:none; }
+        /* ══════════════════════════════════════════════════════════
+           STEP SCROLLING SYSTEM (Batch 5)
+           ══════════════════════════════════════════════════════════ */
 
-/* ═══════════════════════════════════════════════════
-   HERO
-═══════════════════════════════════════════════════ */
-#hero {
-    min-height:100dvh; position:relative;
-    display:flex; flex-direction:column; justify-content:center;
-    padding-top:5.5rem;
-}
-#dots { position:absolute; inset:0; z-index:-1; }
+        /* Fallback (no JS, no GSAP, reduced motion): normal stacked page */
+        .panel {
+            min-height: 100vh;
+            min-height: 100svh;
+            padding: 140px 7% 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-end;
+            text-align: left;
+            position: relative;
+            scroll-margin-top: 72px;
+        }
 
-.hero-tag {
-    display:inline-flex; align-items:center; gap:.6rem;
-    padding:.45rem 1rem; border-radius:99px;
-    background:var(--glass); border:1px solid var(--stroke);
-    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
-    font-family:var(--mono); font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--grey);
-    margin-bottom:2.2rem; width:fit-content;
-}
-.hero-tag .pulse { width:7px; height:7px; border-radius:50%; background:#39e58c; box-shadow:0 0 12px #39e58c; animation:pulse 2.2s ease-in-out infinite; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+        /* Step mode (active when html.stepped) */
+        html.stepped, html.stepped body {
+            height: 100%;
+            overflow: hidden;
+            overscroll-behavior: none;
+        }
 
-.hero-h {
-    font-family:var(--display); font-weight:800;
-    font-size:clamp(3rem, 10vw, 8.2rem);
-    line-height:.96; letter-spacing:-0.03em;
-    text-wrap:balance;
-}
-.hero-h .ghost {
-    display:block;
-    color:transparent;
-    -webkit-text-stroke:1px rgba(255,255,255,.28);
-}
-.hero-h .lit {
-    display:block;
-    background:var(--grad);
-    background-size:200% 200%;
-    -webkit-background-clip:text; background-clip:text;
-    -webkit-text-fill-color:transparent;
-    animation:sheen 7s ease-in-out infinite;
-    padding-bottom:.08em; margin-bottom:-.08em;
-}
-@keyframes sheen { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+        .stepped main {
+            position: fixed;
+            inset: 0;
+            z-index: 10;
+        }
 
-.hero-row {
-    margin-top:2.8rem;
-    display:flex; align-items:flex-end; justify-content:space-between; gap:2.5rem; flex-wrap:wrap;
-}
-.hero-p { max-width:33em; color:var(--grey); font-size:1.02rem; text-wrap:pretty; }
-.hero-p b { color:var(--white); font-weight:600; }
+        .stepped .panel {
+            position: absolute;
+            inset: 0;
+            min-height: 0;
+            height: 100vh;
+            height: 100dvh;
+            padding: 112px 7% 72px;
+            overflow-y: auto;                 /* stops taller than screen scroll inside */
+            overscroll-behavior: contain;
+            scrollbar-width: none;
+            justify-content: flex-start;      /* centring is done by auto margins */
+            visibility: hidden;
+        }
 
-.hero-actions { display:flex; gap:.8rem; flex-wrap:wrap; }
-.btn {
-    display:inline-flex; align-items:center; gap:.5rem;
-    font-family:var(--display); font-weight:700; font-size:.85rem; letter-spacing:.01em;
-    padding:.85rem 1.8rem .95rem; border-radius:99px; text-decoration:none; cursor:pointer;
-    transition:transform .3s var(--ease), box-shadow .3s, background .3s, border-color .3s;
-    border:1px solid transparent;
-}
-.btn:active { transform:scale(.97); }
-.btn-grad { background:var(--grad); background-size:200% 200%; color:#fff; animation:sheen 7s ease-in-out infinite; }
-.btn-grad:hover { transform:translateY(-2px); box-shadow:0 8px 40px rgba(109,91,255,.5); }
-.btn-ghost { background:var(--glass); border-color:var(--stroke); color:var(--white); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); }
-.btn-ghost:hover { border-color:var(--stroke-hi); transform:translateY(-2px); }
-.btn svg { width:14px; height:14px; }
+        .stepped .panel::-webkit-scrollbar {
+            display: none;
+        }
 
-.hero-bottom {
-    position:absolute; bottom:0; left:0; right:0;
-    border-top:1px solid var(--stroke);
-    background:rgba(5,5,10,.35);
-    backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
-}
-.hero-bottom .wrap { display:flex; justify-content:space-between; align-items:center; padding-top:1rem; padding-bottom:1rem; gap:1rem; }
-@media (max-width:640px){ .hero-bottom .mono:last-child{display:none} }
+        .stepped .panel.is-active {
+            visibility: visible;
+        }
 
-/* ═══════════════════════════════════════════════════
-   SECTION SHELL
-═══════════════════════════════════════════════════ */
-section { padding:clamp(5rem,10vw,8.5rem) 0; position:relative; }
+        .stepped .panel .section-content {
+            margin-block: auto;               /* centres, and never clips top when content overflows */
+        }
 
-.sec-head { display:flex; align-items:baseline; gap:1.3rem; margin-bottom:3rem; flex-wrap:wrap; }
-.sec-num {
-    font-family:var(--mono); font-size:.72rem; color:var(--dim); letter-spacing:.16em;
-    padding:.3rem .7rem; border:1px solid var(--stroke); border-radius:99px;
-}
-h2 {
-    font-family:var(--display); font-weight:800;
-    font-size:clamp(2rem,5vw,3.6rem); letter-spacing:-0.025em; line-height:1;
-}
-h2 i { font-style:normal; background:var(--grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+        /* Section Content Container */
+        .section-content {
+            width: 100%;
+            max-width: var(--col);
+            text-align: left;
+        }
 
-/* ═══════════════════════════════════════════════════
-   GLASS CARD  (gradient border + cursor spotlight)
-═══════════════════════════════════════════════════ */
-.g {
-    position:relative;
-    background:var(--glass);
-    border-radius:20px;
-    backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
-    overflow:hidden;
-}
-.g::before { /* gradient hairline border */
-    content:''; position:absolute; inset:0; border-radius:20px; padding:1px;
-    background:linear-gradient(160deg, rgba(255,255,255,.22), rgba(255,255,255,.04) 40%, rgba(109,91,255,.25));
-    -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite:xor; mask-composite:exclude;
-    pointer-events:none;
-}
-.g::after { /* cursor spotlight */
-    content:''; position:absolute; inset:0; border-radius:20px;
-    background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(109,91,255,.16), transparent 55%);
-    opacity:0; transition:opacity .4s; pointer-events:none;
-}
-.g:hover::after { opacity:1; }
+        #hero .section-content {
+            text-align: right;
+        }
 
-/* ═══════════════════════════════════════════════════
-   BENTO — ABOUT
-═══════════════════════════════════════════════════ */
-.bento {
-    display:grid; gap:1rem;
-    grid-template-columns:repeat(12,1fr);
-    grid-auto-rows:minmax(120px,auto);
-}
-.b-intro { grid-column:span 7; padding:2.2rem; }
-.b-terminal { grid-column:span 5; grid-row:span 2; padding:0; display:flex; flex-direction:column; }
-.b-stat { grid-column:span 2; padding:1.5rem; display:flex; flex-direction:column; justify-content:flex-end; }
-.b-htb { grid-column:span 3; padding:1.5rem; display:flex; flex-direction:column; justify-content:space-between; gap:1rem; }
+        /* Position counter, bottom left */
+        .step-counter {
+            position: fixed;
+            left: 5vw;
+            bottom: 28px;
+            z-index: 50;
+            font: 400 0.75rem/1 "JetBrains Mono", monospace;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            display: none;
+            pointer-events: none;
+        }
 
-.b-intro p { color:var(--grey); font-size:.98rem; margin-bottom:.9rem; }
-.b-intro p:last-child { margin-bottom:0; }
-.b-intro b { color:var(--white); font-weight:600; }
-.b-kicker { font-family:var(--mono); font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color:var(--c2); display:block; margin-bottom:1rem; }
+        .stepped .step-counter {
+            display: block;
+        }
 
-.b-stat b {
-    font-variant-numeric:tabular-nums;
-    font-family:var(--display); font-weight:800; font-size:2rem; letter-spacing:-0.02em; line-height:1;
-    background:var(--grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
-}
-.b-stat span { font-family:var(--mono); font-size:.6rem; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); margin-top:.5rem; }
+        .step-counter b {
+            color: var(--accent);
+            font-weight: 600;
+            transition: color 0.5s ease;
+        }
 
-.b-htb .icon { width:34px; height:34px; color:var(--c2); }
-.b-htb p { font-size:.82rem; color:var(--grey); }
-.b-htb p b { color:var(--white); }
+        /* Typography & Components */
+        .section-kicker {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 8px;
+            transition: color 0.5s ease;
+        }
 
-/* terminal */
-.term-head { display:flex; align-items:center; gap:.5rem; padding:.85rem 1.1rem; border-bottom:1px solid var(--stroke); }
-.term-head i { width:10px; height:10px; border-radius:50%; }
-.term-head i:nth-child(1){background:#ff5f57} .term-head i:nth-child(2){background:#febc2e} .term-head i:nth-child(3){background:#28c840}
-.term-head span { margin-left:auto; font-family:var(--mono); font-size:.64rem; color:var(--dim); }
-.term-body { padding:1.2rem 1.3rem; font-family:var(--mono); font-size:.76rem; line-height:1.9; flex:1; }
-.tp { color:#39e58c; } .tk { color:var(--c2); } .tv { color:#ffd166; } .tb { color:var(--c3); } .td { color:var(--dim); } .tw { color:var(--white); }
-.caret { display:inline-block; width:8px; height:14px; background:var(--c2); vertical-align:-2px; animation:pulse 1.1s steps(2) infinite; }
+        h1.hero-name {
+            font-family: "Archivo", sans-serif;
+            font-weight: 800;
+            font-stretch: 62%;
+            font-size: clamp(3.5rem, 8vw, 6.5rem);
+            line-height: 0.95;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            margin-bottom: 0;
+        }
 
-@media (max-width:960px){
-    .b-intro{grid-column:span 12}
-    .b-terminal{grid-column:span 12; grid-row:auto}
-    .b-stat{grid-column:span 6}
-    .b-htb{grid-column:span 6}
-}
+        .hero-bar {
+            width: 64px;
+            height: 4px;
+            background-color: var(--accent);
+            margin: 18px 0 24px auto;
+            transition: background-color 0.5s ease;
+        }
 
-/* ═══════════════════════════════════════════════════
-   EXPERIENCE
-═══════════════════════════════════════════════════ */
-.xp { display:flex; flex-direction:column; gap:.9rem; }
-.xp-item { padding:1.7rem 2rem; display:grid; grid-template-columns:170px 1fr auto; gap:1.6rem; align-items:start; transition:transform .35s var(--ease); }
-.xp-item:hover { transform:translateX(6px); }
-.xp-when { font-variant-numeric: tabular-nums; font-family:var(--mono); font-size:.68rem; letter-spacing:.1em; color:var(--dim); padding-top:.4rem; }
-.xp-what h3 { font-family:var(--display); font-weight:700; font-size:1.12rem; letter-spacing:-0.01em; }
-.xp-what .co { font-size:.82rem; color:var(--c2); font-family:var(--mono); margin:.2rem 0 .6rem; }
-.xp-what p { text-wrap: pretty; font-size:.88rem; color:var(--grey); max-width:52em; }
-.xp-now {
-    font-family:var(--mono); font-size:.6rem; letter-spacing:.14em; text-transform:uppercase;
-    color:#39e58c; border:1px solid rgba(57,229,140,.3); background:rgba(57,229,140,.08);
-    padding:.3rem .7rem; border-radius:99px; white-space:nowrap;
-}
-@media (max-width:820px){ .xp-item{grid-template-columns:1fr; gap:.5rem} .xp-now{width:fit-content} }
+        .hero-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 0 0 28px auto;
+            max-width: 52ch;
+            text-align: right;
+        }
 
-/* ═══════════════════════════════════════════════════
-   PROJECTS
-═══════════════════════════════════════════════════ */
-.pj-grid { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
-.pj { padding:2.1rem; text-decoration:none; display:flex; flex-direction:column; min-height:280px; transition:transform .4s var(--ease); }
-.pj:hover { transform:translateY(-5px); }
-.pj:active { transform:scale(.98); }
-.pj-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:auto; }
-.pj-id { font-family:var(--mono); font-size:.66rem; letter-spacing:.16em; color:var(--dim); }
-.pj-arrow { width:36px; height:36px; border-radius:50%; border:1px solid var(--stroke); display:grid; place-items:center; color:var(--grey); transition:all .35s var(--ease); }
-.pj-arrow svg { width:14px; height:14px; }
-.pj:hover .pj-arrow { background:var(--grad); border-color:transparent; color:#fff; transform:rotate(45deg); }
-.pj h3 { font-family:var(--display); font-weight:700; font-size:1.5rem; letter-spacing:-0.02em; margin:2.2rem 0 .6rem; color:var(--white); }
-.pj p { font-size:.87rem; color:var(--grey); margin-bottom:1.4rem; }
-.pj-tags { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:auto; }
-.pj-tags span {
-    font-family:var(--mono); font-size:.62rem; letter-spacing:.08em;
-    padding:.28rem .65rem; border-radius:99px;
-    border:1px solid var(--stroke); color:var(--grey); background:rgba(255,255,255,.02);
-}
-.pj-tags .wip { color:var(--c3); border-color:rgba(255,78,205,.35); }
-@media (max-width:820px){ .pj-grid{grid-template-columns:1fr} .pj{min-height:0} }
+        .hero-summary p {
+            font-family: "Archivo", sans-serif;
+            font-size: 1.0625rem;
+            line-height: 1.55;
+            color: var(--text-muted);
+            margin: 0;
+        }
 
-/* ═══════════════════════════════════════════════════
-   THE LAB — home server infrastructure
-═══════════════════════════════════════════════════ */
-.lab { padding:clamp(2rem,5vw,3.5rem); display:grid; grid-template-columns:1fr 1.2fr; gap:clamp(2.5rem,5vw,4rem); align-items:start; }
+        .stacked .hero-summary {
+            margin-left: 0;
+            text-align: left;
+            max-width: 100%;
+        }
 
-/* architecture map */
-.net-map { display:flex; flex-direction:column; align-items:stretch; }
-.node {
-    font-family:var(--mono); font-size:.68rem; letter-spacing:.1em;
-    color:var(--white); text-align:center;
-    background:rgba(255,255,255,.04); border:1px solid var(--stroke-hi); border-radius:12px;
-    padding:.7rem 1rem;
-}
-.node small { display:block; font-size:.56rem; color:var(--dim); letter-spacing:.12em; margin-top:.2rem; }
-.node.gate { border-color:rgba(0,212,255,.4); box-shadow:0 0 22px rgba(0,212,255,.12); }
-.node.proxy { border-color:rgba(109,91,255,.45); box-shadow:0 0 22px rgba(109,91,255,.14); }
+        h2.section-big-title {
+            font-family: "Archivo", sans-serif;
+            font-weight: 900;
+            font-stretch: 62%;
+            font-size: clamp(3.2rem, 7.5vw, 5.25rem);
+            line-height: 0.92;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            margin-bottom: 14px;
+        }
 
-.pipe { position:relative; width:1px; height:30px; margin:0 auto; background:rgba(255,255,255,.14); overflow:visible; }
-.pipe::after {
-    content:''; position:absolute; left:-2px; top:-5px; width:5px; height:5px; border-radius:50%;
-    background:var(--c2); box-shadow:0 0 8px var(--c2);
-    animation:packet 1.6s linear infinite;
-}
-@keyframes packet { to { transform:translateY(32px); opacity:.2; } }
+        .section-subcard h3.subcard-title {
+            font-family: "Archivo", sans-serif;
+            font-weight: 800;
+            font-stretch: 62%;
+            font-size: clamp(1.8rem, 3.6vw, 2.6rem);
+            line-height: 1.05;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 6px;
+            transition: color 0.5s ease;
+        }
 
-.zones { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; margin-top:0; }
-.zone { border:1px dashed rgba(255,255,255,.16); border-radius:14px; padding:.85rem; display:flex; flex-direction:column; gap:.55rem; }
-.zone h4 { font-family:var(--mono); font-weight:500; font-size:.58rem; letter-spacing:.18em; text-transform:uppercase; text-align:center; }
-.zone-pub { border-color:rgba(0,212,255,.3); } .zone-pub h4 { color:var(--c2); }
-.zone-priv { border-color:rgba(255,78,205,.3); } .zone-priv h4 { color:var(--c3); }
-.zone .node { font-size:.6rem; padding:.5rem .6rem; }
+        section h2 {
+            font-family: "Archivo", sans-serif;
+            font-weight: 800;
+            font-stretch: 62%;
+            font-size: clamp(2.5rem, 5vw, 4.2rem);
+            line-height: 1.0;
+            text-transform: uppercase;
+            letter-spacing: -0.01em;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
 
-.zone-split { display:grid; grid-template-columns:1fr 1fr; height:30px; }
-.zone-split .pipe { height:30px; }
-.zone-split .pipe:last-child::after { background:var(--c3); box-shadow:0 0 8px var(--c3); animation-delay:.5s; }
+        .lead-subtitle {
+            font-family: "Archivo", sans-serif;
+            font-weight: 500;
+            font-stretch: 100%;
+            font-size: 1.125rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            text-transform: none;
+        }
 
-/* copy side */
-.lab-copy .kick { font-family:var(--mono); font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color:var(--c2); display:block; margin-bottom:1rem; }
-.lab-copy p { color:var(--grey); font-size:.92rem; margin-bottom:1rem; }
-.lab-copy p b { color:var(--white); font-weight:600; }
+        .section-p {
+            font-size: 1.0625rem;
+            line-height: 1.6;
+            color: var(--text);
+            margin-bottom: 24px;
+        }
 
-.lab-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:.6rem; margin:1.5rem 0; }
-.lab-stat { background:rgba(255,255,255,.03); border:1px solid var(--stroke); border-radius:12px; padding:.75rem .5rem; text-align:center; }
-.lab-stat b { font-family:var(--display); font-weight:800; font-size:1.25rem; display:block; background:var(--grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
-.lab-stat span { font-family:var(--mono); font-size:.54rem; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); }
+        /* Button System */
+        .btn-group {
+            display: flex;
+            gap: 14px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
 
-.lab-log { background:rgba(5,5,15,.6); border:1px solid var(--stroke); border-radius:14px; padding:1.1rem 1.3rem; font-family:var(--mono); font-size:.7rem; line-height:2; margin-bottom:1.5rem; }
-.lab-log .hd { color:var(--dim); letter-spacing:.14em; text-transform:uppercase; font-size:.6rem; display:block; margin-bottom:.4rem; }
-.ll-alert { color:#ff6b6b; } .ll-trace { color:#ffd166; } .ll-fix { color:var(--c2); } .ll-ok { color:#39e58c; }
+        #hero .btn-group {
+            justify-content: flex-end;
+        }
 
-.lab-tags { display:flex; flex-wrap:wrap; gap:.4rem; }
-.lab-tags span {
-    font-family:var(--mono); font-size:.6rem; letter-spacing:.06em;
-    padding:.28rem .6rem; border-radius:99px;
-    border:1px solid var(--stroke); color:var(--grey); background:rgba(255,255,255,.02);
-}
+        .btn {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+            cursor: pointer;
+            border: 1px solid var(--text);
+            background-color: var(--text);
+            color: var(--bg);
+            font-weight: 600;
+        }
 
-@media (max-width:960px){ .lab{grid-template-columns:1fr} .lab-stats{grid-template-columns:repeat(2,1fr)} }
+        .btn:hover {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: var(--accent-ink);
+        }
 
-/* ═══════════════════════════════════════════════════
-   SKILLS
-═══════════════════════════════════════════════════ */
-.sk-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
-.sk { padding:1.9rem; }
-.sk h3 {
-    font-family:var(--mono); font-weight:500; font-size:.68rem; letter-spacing:.16em; text-transform:uppercase;
-    background:var(--grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
-    margin-bottom:1.2rem;
-}
-.sk-tags { display:flex; flex-wrap:wrap; gap:.45rem; }
-.sk-tags span {
-    font-family:var(--mono); font-size:.68rem;
-    padding:.35rem .75rem; border-radius:8px;
-    background:rgba(255,255,255,.03); border:1px solid var(--stroke); color:var(--grey);
-    transition:all .25s;
-    cursor:default;
-}
-.sk-tags span:hover { color:var(--white); border-color:var(--stroke-hi); background:rgba(109,91,255,.12); transform:translateY(-1px); }
-@media (max-width:960px){ .sk-grid{grid-template-columns:1fr} }
+        .btn--ghost {
+            background-color: transparent;
+            color: var(--text);
+            border-color: var(--line);
+        }
 
-/* ═══════════════════════════════════════════════════
-   CREDENTIALS
-═══════════════════════════════════════════════════ */
-.cred-grid { display:grid; grid-template-columns:1.1fr 1fr; gap:1rem; align-items:start; }
-.cred-col { display:flex; flex-direction:column; gap:.9rem; }
-.cred { padding:1.5rem 1.8rem; display:flex; align-items:center; gap:1.2rem; text-decoration:none; transition:transform .35s var(--ease); }
-a.cred:hover { transform:translateX(6px); }
-a.cred:active { transform:scale(.98); }
-.cred-ico { width:42px; height:42px; border-radius:12px; flex:0 0 auto; display:grid; place-items:center; background:rgba(109,91,255,.12); border:1px solid rgba(109,91,255,.3); color:var(--c2); }
-.cred-ico svg { width:19px; height:19px; }
-.cred .t { font-family:var(--display); font-weight:700; font-size:.98rem; color:var(--white); }
-.cred .s { font-size:.76rem; color:var(--dim); font-family:var(--mono); margin-top:.15rem; }
-.cred .go { margin-left:auto; font-family:var(--mono); font-size:.64rem; letter-spacing:.1em; color:var(--c2); white-space:nowrap; }
-@media (max-width:900px){ .cred-grid{grid-template-columns:1fr} }
+        .btn--ghost:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background-color: transparent;
+        }
 
-/* ═══════════════════════════════════════════════════
-   DARKROOM — analog camera demo
-═══════════════════════════════════════════════════ */
-.dkr { padding:clamp(2rem,5vw,3.5rem); display:grid; grid-template-columns:1fr 1.1fr; gap:clamp(2.5rem,5vw,4rem); align-items:center; position:relative; }
+        .text-link {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            color: var(--text);
+            text-decoration: underline;
+            text-decoration-color: var(--accent);
+            text-underline-offset: 4px;
+            display: inline-block;
+            transition: color 0.2s ease, text-decoration-color 0.5s ease;
+        }
 
-.dkr-copy .kick { font-family:var(--mono); font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color:var(--c3); display:block; margin-bottom:1rem; }
-.dkr-copy h3 { font-family:var(--display); font-weight:800; font-size:clamp(1.8rem,4vw,2.8rem); letter-spacing:-0.02em; line-height:1; margin-bottom:1rem; }
-.dkr-copy h3 i { font-style:normal; background:var(--grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
-.dkr-copy p { color:var(--grey); font-size:.92rem; max-width:32em; }
-.dkr-copy p b { color:var(--white); font-weight:600; }
+        .text-link:hover {
+            color: var(--accent);
+        }
 
-/* flash overlay */
-.flashfx { position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; z-index:9; border-radius:20px; }
-.flashfx.pop { animation:flashpop .45s ease-out; }
-@keyframes flashpop { 0%{opacity:.85} 100%{opacity:0} }
+        /* Role & Metric Typography */
+        .mono-date {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
 
-/* camera body */
-.cam-side { display:flex; flex-direction:column; align-items:center; gap:1.2rem; }
-.camera { position:relative; width:100%; max-width:350px; aspect-ratio:1.55; user-select:none; }
-.cam-body {
-    position:absolute; inset:0;
-    background:linear-gradient(180deg,#2b2b38 0%,#1d1d29 22%,#14141d 26%,#101018 74%,#191924 78%,#0d0d14 100%);
-    border:1px solid var(--stroke-hi); border-radius:18px;
-    box-shadow:0 30px 80px rgba(5,5,15,.7), inset 0 1px 0 rgba(255,255,255,.14);
-}
-.cam-body::after { /* leatherette */
-    content:''; position:absolute; top:26%; bottom:24%; left:0; right:0;
-    background:repeating-linear-gradient(45deg, rgba(255,255,255,.02) 0 2px, transparent 2px 5px);
-}
-.lens {
-    position:absolute; left:50%; top:58%; transform:translate(-50%,-50%);
-    width:44%; aspect-ratio:1; border-radius:50%;
-    background:#08080e; border:7px solid #26263a;
-    box-shadow:0 0 0 2px rgba(255,255,255,.09), 0 10px 30px rgba(0,0,0,.6), inset 0 0 26px #000;
-}
-.lens::before {
-    content:''; position:absolute; inset:13%; border-radius:50%;
-    background:radial-gradient(circle at 35% 30%, rgba(110,150,255,.4), rgba(60,20,90,.5) 45%, rgba(8,8,16,.95) 72%);
-}
-.lens::after {
-    content:''; position:absolute; left:24%; top:16%; width:20%; height:11%;
-    border-radius:50%; background:rgba(255,255,255,.4); filter:blur(2px); transform:rotate(-24deg);
-}
-.cam-flash {
-    position:absolute; left:7%; top:6%; width:17%; height:13%;
-    border-radius:6px; background:linear-gradient(180deg,#3a3a4c,#20202e);
-    border:1px solid rgba(255,255,255,.14);
-    transition:box-shadow .15s, background .15s;
-}
-.cam-flash.on { background:#fff; box-shadow:0 0 60px 24px rgba(255,255,255,.85); }
-.cam-vf { position:absolute; left:30%; top:7%; width:12%; height:11%; border-radius:4px; background:#05050a; border:1px solid rgba(255,255,255,.16); }
-.cam-counter {
-    position:absolute; right:26%; top:8%; min-width:14%;
-    font-family:var(--mono); font-size:.66rem; text-align:center; color:var(--c2);
-    background:#05050a; border:1px solid rgba(255,255,255,.14); border-radius:4px; padding:.15rem .3rem;
-}
-.shutter {
-    position:absolute; right:7%; top:4.5%; width:13%; aspect-ratio:1;
-    border-radius:50%; cursor:pointer; border:1px solid rgba(255,255,255,.25);
-    background:radial-gradient(circle at 35% 30%, #ff7a7a, #d92f45 60%, #8f1327);
-    box-shadow:0 4px 14px rgba(217,47,69,.45), inset 0 1px 2px rgba(255,255,255,.4);
-    transition:transform .12s var(--ease), box-shadow .12s;
-}
-.shutter:hover { box-shadow:0 4px 22px rgba(217,47,69,.7), inset 0 1px 2px rgba(255,255,255,.4); }
-.shutter:active { transform:translateY(2px) scale(.94); }
-.cam-hint { font-family:var(--mono); font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--dim); }
-.cam-hint b { color:var(--c3); font-weight:500; }
+        .role-bullets {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 12px;
+        }
 
-/* polaroid tray */
-.shots { display:flex; flex-wrap:wrap; gap:1rem; margin-top:1.8rem; min-height:172px; align-items:flex-start; }
-.shots:empty::after {
-    content:'— your shots develop here —';
-    font-family:var(--mono); font-size:.62rem; letter-spacing:.14em; color:var(--dim);
-    align-self:center; margin:auto;
-}
-.shot {
-    background:#f2f0e6; padding:7px 7px 24px; border-radius:3px;
-    box-shadow:0 14px 34px rgba(5,5,15,.7);
-    transform:rotate(var(--r,0deg));
-    animation:eject .7s var(--ease);
-}
-@keyframes eject { from { transform:translateY(26px) rotate(0deg); opacity:0; } }
-.shot canvas { display:block; width:124px; height:124px; background:#0c0a08; filter:brightness(.06) sepia(.9) contrast(.75); transition:filter 2.6s ease; }
-.shot.dev canvas { filter:none; }
-.shot .cap { font-family:var(--mono); font-size:.5rem; letter-spacing:.12em; text-transform:uppercase; color:#8a887a; text-align:center; margin-top:7px; }
+        .role-bullets li {
+            font-size: 1.0625rem;
+            line-height: 1.55;
+            color: var(--text);
+        }
 
-@media (max-width:900px){ .dkr{grid-template-columns:1fr} .camera{max-width:300px} }
+        h3.metric {
+            font-family: "Archivo", sans-serif;
+            font-weight: 800;
+            font-stretch: 62%;
+            font-size: 1rem;
+            line-height: 1.3;
+            text-transform: uppercase;
+            color: var(--text);
+            display: block;
+            margin-bottom: 2px;
+        }
 
-/* ═══════════════════════════════════════════════════
-   CONTACT
-═══════════════════════════════════════════════════ */
-#contact { padding-bottom:4rem; }
-.ct { padding:clamp(2.5rem,6vw,4.5rem); display:grid; grid-template-columns:1.15fr 1fr; gap:clamp(2.5rem,5vw,4.5rem); }
-.ct-h {
-    font-family:var(--display); font-weight:800;
-    font-size:clamp(2.6rem,6vw,4.6rem); letter-spacing:-0.03em; line-height:.98;
-    margin-bottom:1.4rem;
-}
-.ct-h i { font-style:normal; background:var(--grad); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
-.ct-p { color:var(--grey); font-size:.95rem; max-width:30em; margin-bottom:2.2rem; }
-.ct-soc { display:flex; gap:1.5rem; }
-.ct-soc a { font-family:var(--mono); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--grey); text-decoration:none; transition:color .25s; }
-.ct-soc a:hover { color:var(--c2); }
+        .earlier-entry {
+            margin-bottom: 24px;
+        }
 
-.ct-form { display:flex; flex-direction:column; gap:1.1rem; }
-.fg label { display:block; font-family:var(--mono); font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--dim); margin-bottom:.4rem; }
-.fg input, .fg textarea {
-    width:100%;
-    background:rgba(255,255,255,.03);
-    border:1px solid var(--stroke); border-radius:12px;
-    padding:.8rem 1rem;
-    color:var(--white); font-family:var(--body); font-size:.9rem;
-    outline:none; resize:none;
-    transition:border-color .3s, box-shadow .3s;
-}
-.fg input:focus, .fg textarea:focus { border-color:var(--c1); box-shadow:0 0 0 3px rgba(109,91,255,.15); }
-.fg input::placeholder, .fg textarea::placeholder { color:var(--dim); }
-.fg textarea { min-height:104px; }
-.ct-form .btn { align-self:flex-start; border:0; }
-@media (max-width:900px){ .ct{grid-template-columns:1fr} }
+        .earlier-entry:last-child {
+            margin-bottom: 0;
+        }
 
-/* ═══════════════════════════════════════════════════
-   FOOTER
-═══════════════════════════════════════════════════ */
-footer { border-top:1px solid var(--stroke); padding:1.6rem 0; }
-footer .wrap { display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap; align-items:center; }
-footer p { font-family:var(--mono); font-size:.64rem; letter-spacing:.12em; text-transform:uppercase; color:var(--dim); }
-footer a { color:var(--grey); text-decoration:none; }
-footer a:hover { color:var(--c2); }
+        h3.earlier-title {
+            font-family: "Archivo", sans-serif;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--text);
+            margin-bottom: 2px;
+        }
 
-/* ═══════════════════════════════════════════════════
-   MOTION SAFETY
-═══════════════════════════════════════════════════ */
-@media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior:auto; }
-    *,*::before,*::after { animation:none !important; transition:none !important; }
-    .reveal { opacity:1; transform:none; }
-}
-</style>
+        .role-body {
+            font-size: 1.0625rem;
+            line-height: 1.55;
+            color: var(--text);
+            margin-top: 4px;
+        }
+
+        /* Homelab Fortress HUD */
+        .tech-hud {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-top: 16px;
+            font-family: "JetBrains Mono", monospace;
+        }
+
+        .hud-title {
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--line);
+            transition: color 0.5s ease;
+        }
+
+        .hud-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px dashed var(--line);
+            font-size: 0.85rem;
+        }
+
+        .hud-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .hud-label {
+            color: var(--text-muted);
+        }
+
+        .hud-val {
+            color: var(--text);
+            text-align: right;
+            font-weight: 600;
+        }
+
+        /* Skills 2-Column Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 12px;
+        }
+
+        .skills-grid > :nth-child(3):last-child {
+            grid-column: 1 / -1;
+        }
+
+        .skill-group {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 18px;
+        }
+
+        h3.skill-heading {
+            font-family: "Archivo", sans-serif;
+            font-weight: 800;
+            font-stretch: 62%;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .skill-list {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+        }
+
+        /* Credentials List */
+        .creds-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .cred-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 16px;
+            border-bottom: 1px dashed var(--line);
+            padding-bottom: 8px;
+        }
+
+        .cred-name {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .cred-issuer {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-align: right;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 24px;
+            text-align: left;
+            width: 100%;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 12px 16px;
+            font-family: "Archivo", sans-serif;
+            font-size: 1rem;
+            color: var(--text);
+            text-align: left;
+            transition: border-color 0.2s ease;
+            min-height: 48px;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .contact-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-status {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.8rem;
+            min-height: 1.2em;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .contact-footer {
+            margin-top: 36px;
+            padding-top: 18px;
+            border-top: 1px solid var(--line);
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.08em;
+        }
+
+
+        /* Fixed Section Navigation Rail */
+        #section-rail {
+            position: fixed;
+            right: 28px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .rail-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .rail-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--text-muted);
+            opacity: 0.35;
+            transition: all 0.25s ease;
+            pointer-events: none;
+        }
+
+        .rail-btn:hover .rail-dot {
+            opacity: 0.8;
+            background-color: var(--text);
+            transform: scale(1.2);
+        }
+
+        .rail-btn.active .rail-dot {
+            background-color: var(--accent);
+            opacity: 1;
+            transform: scale(1.3);
+        }
+
+        .rail-btn .rail-tooltip {
+            position: absolute;
+            right: 32px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: "JetBrains Mono", monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--accent);
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .rail-btn:hover .rail-tooltip {
+            opacity: 1;
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           MOBILE BREAKPOINTS (≤768px and ≤480px)
+           ══════════════════════════════════════════════════════════ */
+        @media (max-width: 768px) {
+            body { overflow-x: clip; }
+
+            .panel {
+                min-height: auto;
+                padding: 72px 20px;
+                padding-left: max(20px, env(safe-area-inset-left));
+                padding-right: max(20px, env(safe-area-inset-right));
+                align-items: stretch;
+                text-align: left;
+            }
+
+            .stepped .panel {
+                padding: 0 20px 64px;
+            }
+
+            .section-content {
+                max-width: 100%;
+                margin: 0;
+            }
+
+            #hero {
+                min-height: 100vh;
+                min-height: 100svh;
+                text-align: left;
+                align-items: stretch;
+            }
+
+            h1.hero-name { font-size: clamp(3.25rem, 17vw, 5.5rem) !important; }
+            .hero-bar { margin: 16px 0 20px 0; }
+            section h2 { font-size: clamp(2.25rem, 11vw, 3.25rem); }
+
+            .btn-group {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+
+            #hero .btn-group {
+                justify-content: flex-start;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+                min-height: 48px;
+            }
+
+            #section-rail {
+                display: none !important;
+            }
+
+            .step-counter {
+                left: 20px;
+                bottom: max(16px, env(safe-area-inset-bottom));
+            }
+
+            .tech-hud, .skill-group {
+                background: color-mix(in srgb, var(--surface) 94%, transparent);
+            }
+
+            .hud-row {
+                flex-direction: column;
+                gap: 2px;
+                padding: 8px 0;
+            }
+
+            .hud-label {
+                font-size: 0.7rem;
+            }
+
+            .hud-val {
+                font-size: 0.8125rem;
+                word-break: break-word;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cred-row {
+                flex-direction: column;
+                gap: 2px;
+                align-items: flex-start;
+            }
+
+            .cred-issuer {
+                text-align: left;
+            }
+        }
+
+        /* Phone (<= 480px) only */
+        @media (max-width: 480px) {
+            .panel { padding: 64px 18px; }
+            .stepped .panel { padding: 0 18px 56px; }
+            .lead-subtitle { font-size: 1rem; }
+        }
+
+        /* Landscape phones */
+        @media (max-height: 500px) and (orientation: landscape) {
+            #hero {
+                min-height: auto;
+                padding-top: 96px;
+                padding-bottom: 48px;
+            }
+            h1.hero-name {
+                font-size: 3rem !important;
+            }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<!-- BACKDROP -->
-<div class="backdrop" aria-hidden="true">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-    <div class="gridlines"></div>
-</div>
-<div class="grain" aria-hidden="true"></div>
-<div class="progress" id="progress" aria-hidden="true"></div>
+    <!-- Skip Link for Accessibility -->
+    <a class="skip-link" href="#main">Skip to content</a>
 
-<!-- NAV -->
-<nav aria-label="Main">
-    <a class="nav-logo" href="#hero">TR<b>.</b></a>
-    <a class="nav-a" href="#about">About</a>
-    <a class="nav-a" href="#experience">Experience</a>
-    <a class="nav-a" href="#projects">Projects</a>
-    <a class="nav-a" href="#lab">Lab</a>
-    <a class="nav-a" href="#skills">Skills</a>
-    <a class="nav-a" href="#darkroom">Darkroom</a>
-    <a class="nav-cta" href="#contact">Contact</a>
-<button id="nav-toggle" class="nav-toggle" aria-label="Open navigation" aria-expanded="false" onclick="toggleNav(this)"><span></span><span></span><span></span></button>
-<div id="nav-drawer" class="nav-drawer" aria-hidden="true"><a href="#about">About</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#lab">Lab</a><a href="#skills">Skills</a><a href="#darkroom">Darkroom</a><a href="#contact">Contact</a><a href="#contact" class="nav-cta-mobile">Say hello</a></div>
-<style>.nav-toggle{display:none;background:none;border:none;padding:.5rem;cursor:pointer;z-index:92;position:relative;}.nav-toggle span{display:block;width:22px;height:2px;background:#fff;margin:4px 0;transition:.2s;}.nav-drawer{display:none;position:fixed;top:0;left:0;width:100%;height:100vh;background:rgba(10,12,18,.98);backdrop-filter:blur(24px);flex-direction:column;align-items:center;justify-content:center;gap:1.2rem;z-index:90;}.nav-drawer a{color:#fff;font-family:Syne,sans-serif;font-size:1.3rem;text-decoration:none;opacity:.9;}.nav-drawer.open{display:flex;}.nav-drawer a:hover{opacity:1;}.nav-cta-mobile{background:linear-gradient(135deg,#7c3aed,#ec4899);padding:.55rem 1rem;border-radius:9999px;color:#fff;font-weight:600;text-decoration:none;}.nav-cta-mobile:hover{opacity:.9;}.nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg);}.nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0;}.nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}@media(max-width:640px){.nav-toggle{display:block;}.nav-a{display:none !important;}.nav-drawer{display:none;}}@media(max-width:640px){.nav-drawer.open{display:flex;}}</style>
-<style>.lab-para{max-height:6rem;overflow:hidden;transition:max-height .3s ease;}.lab-para.open{max-height:1000px;}.lab-btn{background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.35);color:#ddd;padding:.35rem .9rem;border-radius:9999px;font-family:Syne,sans-serif;font-size:.85rem;cursor:pointer;margin-top:.75rem;}.lab-btn:hover{background:rgba(124,58,237,.4);}</style><script>function toggleNav(btn){const d=document.getElementById('nav-drawer');const open=d.classList.toggle('open');btn.setAttribute('aria-expanded',open?'true':'false');d.setAttribute('aria-hidden',open?'false':'true');if(open){document.body.style.overflow='hidden';}else{document.body.style.overflow='';}}</script></nav>
+    <!-- Fixed 3D WebGL Background Canvas -->
+    <div id="three-canvas-container" aria-hidden="true"></div>
 
-<!-- HERO -->
-<section id="hero">
-    <canvas id="dots" aria-hidden="true"></canvas>
-    <div class="wrap">
-        <div class="hero-tag reveal in"><span class="pulse"></span>Open to opportunities · Vancouver, BC</div>
-        <h1 class="hero-h reveal in" aria-label="TANISH RATHORE — Cybersecurity Professional">
-            <span class="ghost">TANISH</span>
-            <span class="lit">RATHORE</span>
-        </h1>
-        <div class="hero-row reveal in">
-            <p class="hero-p">
-                Cybersecurity professional — <b>MS Cybersecurity @ SFU</b>, Security+ certified.
-                I work in SIEM, threat detection, and endpoint hardening, currently securing
-                <b>200+ endpoints</b> at TLC Solutions.
-            </p>
-            <div class="hero-actions">
-                <a class="btn btn-grad" href="#projects">
-                    View work
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-                </a>
-                <a class="btn btn-ghost" href="#contact">Get in touch</a>
-            </div>
-        </div>
-    </div>
-    <div class="hero-bottom">
-        <div class="wrap">
-            <span class="mono">Scroll ↓</span>
-            <span class="mono">SIEM · Threat Detection · Endpoint Hardening · CTF</span>
-        </div>
-    </div>
-</section>
+    <!-- Fixed Section Navigation Rail -->
+    <nav id="section-rail" aria-label="Quick page navigation"></nav>
 
-<!-- EXPERIENCE -->
-<section id="experience">
-    <div class="wrap">
-        <div class="sec-head reveal">
-            <span class="sec-num">02</span>
-            <h2>Where I've <i>worked.</i></h2>
-        </div>
-        <div class="xp">
-            <div class="g xp-item reveal">
-                <div class="xp-when">Apr 2025 — Now</div>
-                <div class="xp-what">
-                    <h3>Systems &amp; Security Technician</h3>
-                    <div class="co">TLC Solutions · Langley, BC</div>
-                    <p>Triage network and endpoint security alerts across client fleets, drive patch and configuration compliance, and hardened 200+ endpoints through a fleet-wide refresh — documented in SharePoint/Confluence.</p>
-                </div>
-                <span class="xp-now">● Current</span>
-            </div>
-            <div class="g xp-item reveal">
-                <div class="xp-when">May 2023 — Jun 2025</div>
-                <div class="xp-what">
-                    <h3>Tier 1 Analyst</h3>
-                    <div class="co">University of the Fraser Valley · Abbotsford, BC</div>
-                    <p>Resolved 15+ tickets daily within SLA and led OS upgrades for 1,000+ users; managed endpoints via Intune, SCCM, Active Directory, Azure AD, and Exchange.</p>
-                </div>
-                <span></span>
-            </div>
-            <div class="g xp-item reveal">
-                <div class="xp-when">Sep 2022 — May 2023</div>
-                <div class="xp-what">
-                    <h3>Support Analyst</h3>
-                    <div class="co">University of the Fraser Valley · Abbotsford, BC</div>
-                    <p>Ran infrastructure risk assessments and led IT training that cut escalations by 30%; implemented maintenance protocols that reduced downtime.</p>
-                </div>
-                <span></span>
-            </div>
-            <div class="g xp-item reveal">
-                <div class="xp-when">May 2022 — Sep 2022</div>
-                <div class="xp-what">
-                    <h3>Analyst Intern</h3>
-                    <div class="co">Aviso Wealth · Vancouver, BC</div>
-                    <p>Resolved 80% of Level 1/2 issues without escalation and reduced asset loss by 15% through streamlined tracking.</p>
-                </div>
-                <span></span>
-            </div>
-        </div>
-    </div>
-</section>
+    <!-- Position Counter (Step Mode) -->
+    <div class="step-counter" id="step-counter" aria-hidden="true"></div>
 
-<!-- PROJECTS -->
-<section id="projects">
-    <div class="wrap">
-        <div class="sec-head reveal">
-            <span class="sec-num">03</span>
-            <h2>Selected <i>work.</i></h2>
-        </div>
-        <div class="pj-grid">
-            <a class="g pj reveal" href="https://github.com/ogscriptkiddie/Azure-Sentinel_siem" target="_blank" rel="noopener">
-                <div class="pj-top">
-                    <span class="pj-id">P—001</span>
-                    <span class="pj-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
-                </div>
-                <h3>Azure Sentinel SIEM</h3>
-                <p>A live global threat map built on Microsoft Sentinel — ingesting VM logs and using custom KQL analytic rules to visualise attack origins in real time.</p>
-                <div class="pj-tags"><span>Azure Sentinel</span><span>KQL</span><span>Log Analytics</span><span>Threat Intel</span></div>
-            </a>
-            <a class="g pj reveal" href="https://github.com/ogscriptkiddie/SOC-Simulator" target="_blank" rel="noopener">
-                <div class="pj-top">
-                    <span class="pj-id">P—002</span>
-                    <span class="pj-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
-                </div>
-                <h3>SOC Simulator Lab</h3>
-                <p>A simulated Security Operations Center for practising incident-response workflows — refining Elastic SIEM detection logic to separate false positives from real threats.</p>
-                <div class="pj-tags"><span>Elastic SIEM</span><span>Incident Response</span><span>SOC</span></div>
-            </a>
-            <div class="g pj reveal">
-                <div class="pj-top">
-                    <span class="pj-id">P—003</span>
-                    <span class="pj-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
-                </div>
-                <h3>Home Security Audit</h3>
-                <p>Nmap vulnerability assessments across a home network, hardened via IoT segmentation, firewall tuning, and continuous monitoring with a self-hosted SIEM on Proxmox.</p>
-                <div class="pj-tags"><span class="wip">In progress</span><span>Nmap</span><span>IoT Security</span><span>Proxmox</span></div>
-            </div>
-            <a class="g pj reveal" href="https://github.com/ogscriptkiddie/Security-Awareness-Campaign/tree/main" target="_blank" rel="noopener">
-                <div class="pj-top">
-                    <span class="pj-id">P—004</span>
-                    <span class="pj-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></span>
-                </div>
-                <h3>Security Awareness Campaign</h3>
-                <p>A phishing-prevention campaign with educational simulations targeting social-engineering vectors — designed to build a proactive security culture.</p>
-                <div class="pj-tags"><span>Phishing Simulation</span><span>Social Engineering</span></div>
-            </a>
-        </div>
-    </div>
-</section>
+    <!-- Main Landmark: Exactly 12 Full-Screen Stops -->
+    <main id="main">
 
-<!-- THE LAB -->
-<section id="lab">
-    <div class="wrap">
-        <div class="sec-head reveal">
-            <span class="sec-num">04</span>
-            <h2>The <i>lab.</i></h2>
-        </div>
-        <div class="g lab reveal">
-            <div class="net-map" aria-label="Home server architecture: internet traffic flows through Cloudflare Tunnel to Traefik with CrowdSec and Let's Encrypt, then splits into a public zone (Jellyfin, request services) and a private zone (Tailscale VPN, Authelia SSO, AdGuard DNS, Grafana, Vaultwarden)">
-                <div class="node">INTERNET<small>zero inbound ports</small></div>
-                <div class="pipe"></div>
-                <div class="node gate">CLOUDFLARE TUNNEL<small>no exposed surface</small></div><div class="lab-legend" aria-label="Lab architecture legend"><span>● Active flow</span> <span>● Zone boundary</span> <span>● Packet</span></div>
-                <div class="pipe"></div>
-                <div class="node proxy">TRAEFIK<small>TLS · Let's Encrypt DNS-01 · CrowdSec IPS</small></div>
-                <div class="zone-split">
-                    <div class="pipe"></div>
-                    <div class="pipe"></div>
+        <!-- 01 HERO -->
+        <section class="panel is-active" id="hero"
+                 data-label="Intro" data-group="intro"
+                 data-shape="shield" data-color="#ff5a1f">
+            <div class="section-content">
+                <h1 class="hero-name">
+                    TANISH<br>RATHORE
+                </h1>
+                <div class="hero-bar"></div>
+                <div class="hero-summary">
+                    <p>Technical Support Specialist at Fortinet, troubleshooting FortiEDR cases and resolving endpoint security incidents.</p>
+                    <p>Systems and security technician with hands-on MSP experience across Microsoft 365, Entra ID, Intune, and SentinelOne.</p>
+                    <p>Detection engineer building Sentinel threat intelligence pipelines, Elastic SIEM labs, and a zero-trust homelab.</p>
                 </div>
-                <div class="zones">
-                    <div class="zone zone-pub">
-                        <h4>Public zone</h4>
-                        <div class="node">JELLYFIN<small>media streaming</small></div>
-                        <div class="node">REQUESTS<small>invite-based · Wizarr</small></div>
+                <div class="btn-group">
+                    <a href="resume.html" class="btn">
+                        Résumé
+                    </a>
+                    <a href="#experience" class="btn btn--ghost">
+                        See the work
+                    </a>
+                    <a href="#contact" class="btn btn--ghost">
+                        Get in touch
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 02 EXPERIENCE: Fortinet -->
+        <section class="panel" id="experience"
+                 data-label="Fortinet" data-group="experience"
+                 data-shape="monitor" data-color="#ff4f5e">
+            <div class="section-content">
+                <span class="section-kicker">Experience · 1 of 3</span>
+                <h2 class="section-big-title">EXPERIENCE</h2>
+                <div class="section-subcard">
+                    <h3 class="subcard-title">FORTINET</h3>
+                    <p class="lead-subtitle">Technical Support Specialist · Burnaby · Oct 2026 – Present</p>
+                    <ul class="role-bullets">
+                        <li>
+                            <h4 class="metric">FORTIEDR TROUBLESHOOTING</h4>
+                            Work customer cases on FortiEDR deployments, from first report through to resolution.
+                        </li>
+                        <li>
+                            <h4 class="metric">BUG COORDINATION</h4>
+                            Escalate confirmed product defects to engineering and track each one through to a fix.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 03 EXPERIENCE: TLC Solutions -->
+        <section class="panel" id="experience-tlc"
+                 data-label="TLC Solutions" data-group="experience"
+                 data-shape="hub" data-color="#7c8cff">
+            <div class="section-content">
+                <span class="section-kicker">Experience · 2 of 3</span>
+                <h2>TLC SOLUTIONS</h2>
+                <p class="lead-subtitle">Systems and Security Technician · Langley · Apr 2025 – 2026</p>
+                <ul class="role-bullets">
+                    <li>
+                        <h3 class="metric">200+ ENDPOINTS, MANY TENANTS</h3>
+                        Ran an OS refresh and hardening pass across 200+ endpoints for clients in BC, Alberta and California.
+                    </li>
+                    <li>
+                        <h3 class="metric">IDENTITY AND ENDPOINT MANAGEMENT</h3>
+                        Microsoft 365, Entra ID, on-prem AD with Entra Connect, Exchange Online and Intune. Configured SSO and SCIM provisioning through Entra ID for a client SaaS rollout.
+                    </li>
+                    <li>
+                        <h3 class="metric">EDR ALERT TRIAGE</h3>
+                        Triaged SentinelOne alerts, isolated affected machines, and kept patching on schedule through Datto RMM.
+                    </li>
+                    <li>
+                        <h3 class="metric">RUNBOOKS</h3>
+                        Wrote incident and support procedures in Confluence and SharePoint so the next technician could follow them.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 04 EXPERIENCE: Earlier roles -->
+        <section class="panel" id="experience-earlier"
+                 data-label="Earlier roles" data-group="experience"
+                 data-shape="steps" data-color="#5ad1c0">
+            <div class="section-content">
+                <span class="section-kicker">Experience · 3 of 3</span>
+                <h2>EARLIER ROLES</h2>
+                <div class="earlier-entry">
+                    <h3 class="earlier-title">Service Desk Analyst I · University of the Fraser Valley</h3>
+                    <p class="role-body">Supported 1,000+ users and ran campus OS upgrade cycles. Managed devices and access through Intune, Active Directory, SCCM and Exchange. Built security awareness training for faculty and staff, which cut escalations by about 30%.</p>
+                </div>
+                <div class="earlier-entry">
+                    <h3 class="earlier-title">Summer IT Intern · Aviso Wealth</h3>
+                    <p class="role-body">Trained in enterprise IT operations and assisted the Level 3 team with issue resolution.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 05 PROJECTS: Sentinel Honeypot -->
+        <section class="panel" id="projects"
+                 data-label="Sentinel Honeypot" data-group="projects"
+                 data-shape="globe" data-color="#2ed3e6">
+            <div class="section-content">
+                <span class="section-kicker">Projects · 1 of 3</span>
+                <h2 class="section-big-title">PROJECTS</h2>
+                <div class="section-subcard">
+                    <h3 class="subcard-title">SENTINEL HONEYPOT</h3>
+                    <p class="lead-subtitle">Microsoft Sentinel · KQL · Azure</p>
+                    <div class="section-p">
+                        I exposed a honeypot VM on Azure, shipped its sign-in logs to Microsoft Sentinel, and wrote KQL to flag brute-force attempts and plot the source IPs on a world map.
                     </div>
-                    <div class="zone zone-priv">
-                        <h4>Private zone</h4>
-                        <div class="node">TAILSCALE<small>mesh VPN · split-DNS</small></div>
-                        <div class="node">AUTHELIA<small>SSO / 2FA</small></div>
-                        <div class="node">GRAFANA · VAULTWARDEN<small>admin only</small></div>
+                    <a href="https://github.com/ogscriptkiddie/Azure-Sentinel_siem" target="_blank" rel="noopener" class="text-link">View source ↗</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 06 PROJECTS: SOC Simulator -->
+        <section class="panel" id="project-soc"
+                 data-label="SOC Simulator" data-group="projects"
+                 data-shape="radar" data-color="#3ddc84">
+            <div class="section-content">
+                <span class="section-kicker">Project · 2 of 3</span>
+                <h2>SOC SIMULATOR</h2>
+                <p class="lead-subtitle">Elastic SIEM · Attack simulation · Alert tuning</p>
+                <div class="section-p">
+                    An Elastic SIEM lab where I run reconnaissance, privilege escalation and lateral movement against my own hosts, then tune the detection rules until the alerts that fire are worth reading. Each simulated technique gets a rule, a test, and a tuning pass.
+                </div>
+                <a href="https://github.com/ogscriptkiddie/SOC-Simulator" target="_blank" rel="noopener" class="text-link">View source ↗</a>
+            </div>
+        </section>
+
+        <!-- 07 PROJECTS: ClauseGuard -->
+        <section class="panel" id="project-clauseguard"
+                 data-label="ClauseGuard" data-group="projects"
+                 data-shape="document" data-color="#ff8fb1">
+            <div class="section-content">
+                <span class="section-kicker">Project · 3 of 3</span>
+                <h2>CLAUSEGUARD</h2>
+                <p class="lead-subtitle">AI-assisted terms and conditions analyzer</p>
+                <div class="section-p">
+                    Paste in a terms-of-service or privacy policy and ClauseGuard flags the clauses worth reading before you click accept.
+                </div>
+                <a href="https://github.com/ogscriptkiddie/clauseguard" target="_blank" rel="noopener" class="text-link">View source ↗</a>
+            </div>
+        </section>
+
+        <!-- 08 HOMELAB: Fortress -->
+        <section class="panel" id="homelab"
+                 data-label="Homelab" data-group="homelab"
+                 data-shape="rack" data-color="#a78bfa">
+            <div class="section-content">
+                <span class="section-kicker">Homelab</span>
+                <h2>FORTRESS</h2>
+                <p class="lead-subtitle">Zero open inbound ports · 25+ services</p>
+                <div class="section-p">
+                    My home server: Ubuntu 24.04 running 25+ containers across three isolated Docker networks. Nothing is port-forwarded. Public traffic comes in through a Cloudflare Tunnel; private access goes over Tailscale.
+                </div>
+                <div class="tech-hud">
+                    <div class="hud-title">Architecture</div>
+                    <div class="hud-row">
+                        <span class="hud-label">Ingress:</span>
+                        <span class="hud-val">Cloudflare Tunnel → Traefik TLS</span>
+                    </div>
+                    <div class="hud-row">
+                        <span class="hud-label">Security:</span>
+                        <span class="hud-val">CrowdSec IPS · Authelia 2FA</span>
+                    </div>
+                    <div class="hud-row">
+                        <span class="hud-label">Private mesh:</span>
+                        <span class="hud-val">Tailscale · Split-DNS</span>
+                    </div>
+                    <div class="hud-row">
+                        <span class="hud-label">Telemetry:</span>
+                        <span class="hud-val">Prometheus · Grafana · Loki</span>
+                    </div>
+                    <div class="hud-row">
+                        <span class="hud-label">Backups:</span>
+                        <span class="hud-val">Restic off-site · SOPS + age encryption</span>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <div class="lab-copy">
-                <span class="kick">// Flagship — production-grade homelab</span>
-                <p><b>A home server built like an enterprise network.</b> Ubuntu 24.04, 25+ containerized services orchestrated with Docker Compose across three isolated networks — with a zero-inbound-ports posture: everything public routes through a Cloudflare Tunnel into Traefik, with CrowdSec intrusion prevention and Authelia SSO/2FA guarding the admin plane.</p>
-                <p>Full observability pipeline (<b>Prometheus, Grafana, Loki, Alertmanager</b> with Telegram alerting), secrets encrypted with <b>SOPS + age</b>, and encrypted off-site backups via <b>Restic</b>. No credential ever touches the repo in plaintext.</p>
-                <div class="lab-stats">
-                    <div class="lab-stat"><b>0</b><span>Inbound ports</span></div>
-                    <div class="lab-stat"><b>25+</b><span>Services</span></div>
-                    <div class="lab-stat"><b>3</b><span>Isolated networks</span></div>
-                    <div class="lab-stat"><b>2FA</b><span>Admin plane</span></div>
-                </div>
-                <div class="lab-log">
-                    <span class="hd">// Incident log — real recovery, not a tutorial</span>
-                    <div><span class="ll-alert">[ALERT]</span> backup.service failed → host dropped to emergency mode</div>
-                    <div><span class="ll-trace">[TRACE]</span> socket-proxy discovery down → segmentation + routing broken</div>
-                    <div><span class="ll-fix">[FIX]</span> walked the chain: networks → discovery → port conflicts → TLS re-issue</div>
-                    <div><span class="ll-ok">[RESOLVED]</span> full recovery · root cause documented</div>
-                </div>
-                <div class="lab-tags">
-                    <span>Cloudflare Tunnel</span><span>Traefik</span><span>CrowdSec</span><span>Authelia</span>
-                    <span>Tailscale</span><span>AdGuard Home</span><span>Docker Compose</span><span>Prometheus</span>
-                    <span>Grafana</span><span>Loki</span><span>Vaultwarden</span><span>SOPS + age</span><span>Restic</span>
-                    <span>Jellyfin + Arr suite</span>
+        <!-- 09 SKILLS: The Skill Groups -->
+        <section class="panel" id="skills"
+                 data-label="Skills" data-group="skills"
+                 data-shape="gear" data-color="#b8e04a">
+            <div class="section-content">
+                <span class="section-kicker">Capabilities · 1 of 2</span>
+                <h2 class="section-big-title">SKILLS</h2>
+
+                <div class="skills-grid">
+                    <div class="skill-group">
+                        <h3 class="skill-heading">DETECTION AND EDR</h3>
+                        <p class="skill-list">FortiEDR, SentinelOne, Microsoft Sentinel, KQL, Splunk, Elastic SIEM</p>
+                    </div>
+                    <div class="skill-group">
+                        <h3 class="skill-heading">SYSTEMS &amp; ENDPOINT ADMIN</h3>
+                        <p class="skill-list">Entra ID, Active Directory, Microsoft Intune, Datto RMM, Exchange, Proxmox VE</p>
+                    </div>
+                    <div class="skill-group">
+                        <h3 class="skill-heading">NETWORKING &amp; INFRASTRUCTURE</h3>
+                        <p class="skill-list">Cloudflare Tunnels, Traefik, CrowdSec, Tailscale, AdGuard Home, Docker Compose, Linux, SOPS + age, Restic</p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
 
-<!-- SKILLS -->
-<section id="skills">
-    <div class="wrap">
-        <div class="sec-head reveal">
-            <span class="sec-num">05</span>
-            <h2>Tools of the <i>trade.</i></h2>
-        </div>
-        <div class="sk-grid">
-            <div class="g sk reveal">
-                <h3>Security &amp; Networking</h3>
-                <div class="sk-tags">
-                    <span>SIEM / SOC</span><span>KQL</span><span>Threat Detection</span><span>Risk Assessment</span>
-                    <span>Firewall Config</span><span>Network Segmentation</span><span>Endpoint Security</span>
-                    <span>IoT Security</span><span>NIST</span><span>ISO 27001</span><span>Nmap</span>
+        <!-- 10 EDUCATION AND CERTS: Credentials List -->
+        <section class="panel" id="certs"
+                 data-label="Education and certs" data-group="skills"
+                 data-shape="medal" data-color="#ffd166">
+            <div class="section-content">
+                <span class="section-kicker">Capabilities · 2 of 2</span>
+                <h2>EDUCATION AND CERTS</h2>
+
+                <h3 class="metric" style="margin-top: 8px;">EDUCATION</h3>
+                <div class="creds-list">
+                    <div class="cred-row">
+                        <span class="cred-name">MSc, Cybersecurity (in progress)</span>
+                        <span class="cred-issuer">Simon Fraser University</span>
+                    </div>
+                    <div class="cred-row">
+                        <span class="cred-name">BCIS, Major in Cybersecurity</span>
+                        <span class="cred-issuer">University of the Fraser Valley, 2024</span>
+                    </div>
+                </div>
+
+                <h3 class="metric" style="margin-top: 28px;">CERTIFICATIONS</h3>
+                <div class="creds-list">
+                    <div class="cred-row">
+                        <span class="cred-name">CompTIA Security+</span>
+                        <span class="cred-issuer">CompTIA</span>
+                    </div>
+                    <div class="cred-row">
+                        <span class="cred-name">Cisco Certified Network Associate (CCNA)</span>
+                        <span class="cred-issuer">Cisco</span>
+                    </div>
+                    <div class="cred-row">
+                        <span class="cred-name">Cisco Certified Technician (CCT)</span>
+                        <span class="cred-issuer">Cisco</span>
+                    </div>
+                    <div class="cred-row">
+                        <span class="cred-name">Google Cybersecurity Professional</span>
+                        <span class="cred-issuer">Google</span>
+                    </div>
+                    <div class="cred-row">
+                        <span class="cred-name">Cybersecurity Strategy &amp; Risk</span>
+                        <span class="cred-issuer">University of British Columbia</span>
+                    </div>
                 </div>
             </div>
-            <div class="g sk reveal">
-                <h3>Administration &amp; ITSM</h3>
-                <div class="sk-tags">
-                    <span>Active Directory</span><span>Azure AD</span><span>Intune</span><span>SCCM</span>
-                    <span>Exchange Admin</span><span>TDx</span><span>SharePoint</span><span>Confluence</span><span>Proxmox</span>
+        </section>
+
+        <!-- 11 OFF THE CLOCK: Trails & Film -->
+        <section class="panel" id="off-the-clock"
+                 data-label="Off the clock" data-group="personal"
+                 data-shape="mountains" data-color="#ff8a4c">
+            <div class="section-content">
+                <span class="section-kicker">Off the clock</span>
+                <h2>TRAILS AND FILM</h2>
+                <ul class="role-bullets">
+                    <li>
+                        <h3 class="metric">TRAILS</h3>
+                        Hiking and trail running in the BC backcountry. Long climbs are where I learned to pace a hard problem instead of sprinting at it.
+                    </li>
+                    <li>
+                        <h3 class="metric">35MM FILM</h3>
+                        A roll gives you 36 frames and no preview, so every shot gets checked before it's taken. I treat changes to production the same way.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 12 CONTACT: Get in Touch -->
+        <section class="panel" id="contact"
+                 data-label="Contact" data-group="contact"
+                 data-shape="envelope" data-color="#ff5a1f">
+            <div class="section-content">
+                <span class="section-kicker">Contact</span>
+                <h2>GET IN TOUCH</h2>
+                <div class="section-p">
+                    Happy to talk endpoint security, detection engineering, or homelab builds.
+                </div>
+
+                <form class="contact-form" id="contact-form" action="https://formsubmit.co/59add3f454616cd68040185e2874e3e7" method="POST">
+                    <input type="hidden" name="_next" value="https://tanishr.dev/#contact">
+                    <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+                    <input type="hidden" name="_subject" value="Portfolio contact">
+
+                    <label for="cf-name" class="sr-only">Name</label>
+                    <input type="text" id="cf-name" name="name" placeholder="Your name" required autocomplete="name">
+
+                    <label for="cf-email" class="sr-only">Email address</label>
+                    <input type="email" id="cf-email" name="email" placeholder="Your email" required autocomplete="email">
+
+                    <label for="cf-message" class="sr-only">Message details</label>
+                    <textarea id="cf-message" name="message" placeholder="Message details" required></textarea>
+
+                    <button type="submit" class="btn">SEND MESSAGE</button>
+                    <p class="form-status" role="status" aria-live="polite"></p>
+                </form>
+
+                <div class="btn-group" style="margin-top: 24px;">
+                    <a href="https://www.linkedin.com/in/tanish-rathore" target="_blank" rel="noopener" class="btn btn--ghost">
+                        LinkedIn ↗
+                    </a>
+                    <a href="https://github.com/ogscriptkiddie" target="_blank" rel="noopener" class="btn btn--ghost">
+                        GitHub ↗
+                    </a>
+                </div>
+
+                <div class="contact-footer">
+                    © 2026 Tanish Rathore
                 </div>
             </div>
-            <div class="g sk reveal">
-                <h3>Platforms &amp; Practice</h3>
-                <div class="sk-tags">
-                    <span>Azure Sentinel</span><span>Elastic SIEM</span><span>Microsoft 365</span><span>VMware</span>
-                    <span>Incident Response</span><span>Threat Intelligence</span><span>Hack The Box</span><span>TryHackMe</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+        </section>
 
-<!-- CREDENTIALS -->
-<section id="credentials">
-    <div class="wrap">
-        <div class="sec-head reveal">
-            <span class="sec-num">06</span>
-            <h2>Education &amp; <i>certs.</i></h2>
-        </div>
-        <div class="cred-grid">
-            <div class="cred-col">
-                <div class="g cred reveal">
-                    <div class="cred-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg></div>
-                    <div><div class="t">MS, Cybersecurity</div><div class="s">Simon Fraser University · 2025—2027</div></div>
-                </div>
-                <div class="g cred reveal">
-                    <div class="cred-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg></div>
-                    <div><div class="t">BCIS, Major in Cybersecurity</div><div class="s">University of the Fraser Valley · 2024</div></div>
-                </div>
-                <div class="g cred reveal">
-                    <div class="cred-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg></div>
-                    <div><div class="t">Diploma, Computer &amp; Info Sciences</div><div class="s">University of the Fraser Valley · 2022</div></div>
-                </div>
-            </div>
-            <div class="cred-col">
-                <a class="g cred reveal" href="https://www.credly.com/badges/a288eb18-e5f3-49c2-b6f2-7d98d22e5b79/linked_in_profile" target="_blank" rel="noopener">
-                    <div class="cred-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2L3 7v6c0 5 4 8.4 9 9 5-.6 9-4 9-9V7l-9-5z"/><path d="M9 12l2 2 4-4"/></svg></div>
-                    <div><div class="t">CompTIA Security+</div><div class="s">CompTIA</div></div>
-                    <span class="go">Verify ↗</span>
-                </a>
-                <a class="g cred reveal" href="https://www.credly.com/badges/dc67aa79-343e-4ab1-88dd-ffb6ee1800bb" target="_blank" rel="noopener">
-                    <div class="cred-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2L3 7v6c0 5 4 8.4 9 9 5-.6 9-4 9-9V7l-9-5z"/><path d="M9 12l2 2 4-4"/></svg></div>
-                    <div><div class="t">Google Cybersecurity</div><div class="s">Google</div></div>
-                    <span class="go">Verify ↗</span>
-                </a>
-                <a class="g cred reveal" href="https://www.credential.net/c6f73475-c38b-480d-a9fa-7347820f6510#acc.zafnGOIr" target="_blank" rel="noopener">
-                    <div class="cred-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2L3 7v6c0 5 4 8.4 9 9 5-.6 9-4 9-9V7l-9-5z"/><path d="M9 12l2 2 4-4"/></svg></div>
-                    <div><div class="t">Cybersecurity Strategy &amp; Risk</div><div class="s">University of British Columbia</div></div>
-                    <span class="go">Verify ↗</span>
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
+    </main>
 
-<!-- DARKROOM -->
-<section id="darkroom">
-    <div class="wrap">
-        <div class="sec-head reveal">
-            <span class="sec-num">07</span>
-            <h2>Off the <i>clock.</i></h2>
-        </div>
-        <div class="g dkr reveal">
-            <div class="flashfx" id="flashfx"></div>
-            <div class="cam-side">
-                <div class="camera">
-                    <div class="cam-body"></div>
-                    <div class="cam-flash" id="camFlash"></div>
-                    <div class="cam-vf"></div>
-                    <div class="cam-counter" id="camCounter">24</div>
-                    <button class="shutter" id="shutter" type="button" aria-label="Take a photo"></button>
-                    <div class="lens"></div>
-                </div>
-                <div class="cam-hint">Press the <b>red shutter</b> — every frame is one of a kind</div>
-            </div>
-            <div class="dkr-copy">
-                <span class="kick">// Not career. Just love.</span>
-                <h3>I also shoot <i>film.</i></h3>
-                <p>Off the clock I'm hiking BC trails with an analog camera — grain, light leaks, no retakes. This one's loaded with code instead of Kodak: every press of the shutter generates a <b>one-of-a-kind mountain scene</b> and develops it right in front of you.</p>
-                <div class="shots" id="shots"></div>
-            </div>
-        </div>
-    </div>
-</section>
+    <!-- Three.js Canvas & Particle Shapes -->
+    <script type="module">
+        import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.js';
 
-<!-- CONTACT -->
-<section id="contact">
-    <div class="wrap">
-        <div class="g ct reveal">
-            <div>
-                <p class="ct-h">Let's talk <i>security.</i></p>
-                <p class="ct-p">Open to roles, projects, or just a good conversation about threat detection. Drop a message through the form or find me on LinkedIn.</p>
-                <div class="ct-soc">
-                    <a href="https://www.linkedin.com/in/tanish-rathore" target="_blank" rel="noopener">LinkedIn ↗</a>
-                    <a href="https://github.com/ogscriptkiddie" target="_blank" rel="noopener">GitHub ↗</a>
-                </div>
-            </div>
-            <form class="ct-form" action="https://formsubmit.co/59add3f454616cd68040185e2874e3e7" method="POST">
-                <div class="fg">
-                    <label for="cname">Name</label>
-                    <input type="text" id="cname" name="name" placeholder="Your name" autocomplete="name" required>
-                </div>
-                <div class="fg">
-                    <label for="cemail">Email</label>
-                    <input type="email" id="cemail" name="email" placeholder="you@email.com" autocomplete="email" required>
-                </div>
-                <div class="fg">
-                    <label for="cmsg">Message</label>
-                    <textarea id="cmsg" name="message" placeholder="What's on your mind?" required></textarea>
-                </div>
-                <button type="submit" class="btn btn-grad">
-                    Send message
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                </button>
-            </form>
-        </div>
-    </div>
-</section>
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-<!-- FOOTER -->
-<footer>
-    <div class="wrap">
-        <p>© 2026 Tanish Rathore — Abbotsford, BC</p>
-        <p id="clock">Local — PT</p>
-        <p><a href="#hero">Back to top ↑</a></p>
-    </div>
-</footer>
+        let scene, camera, renderer;
+        let morphPoints;
+        let startAttr, endAttr;
+        let targetShapeKey = 'shield';
+        let webGlReady = false;
 
-<script>
-/* ─── scroll progress ─── */
-const prog = document.getElementById('progress');
-addEventListener('scroll', () => {
-    const h = document.documentElement;
-    prog.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
-}, { passive:true });
+        const SHAPE_EXTENT = 2.55;       // widest/tallest any shape gets, in world units, with a little margin
+        let layoutMode = 'side';
 
-/* ─── reveal ─── */
-const io = new IntersectionObserver(entries => {
-    entries.forEach((e, i) => {
-        if (e.isIntersecting) {
-            e.target.style.transitionDelay = (i * 60) + 'ms';
-            e.target.classList.add('in');
-            io.unobserve(e.target);
-        }
-    });
-}, { threshold:.1, rootMargin:'0px 0px -40px 0px' });
-document.querySelectorAll('.reveal:not(.in)').forEach(el => io.observe(el));
+        function layoutShape(animateIt = false) {
+            if (!webGlReady || !morphPoints) return;
+            const w = window.innerWidth, h = window.innerHeight;
+            const halfH = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z;
+            const halfW = halfH * camera.aspect;
+            const unit = (2 * halfW) / w;                           // world units per CSS pixel at z = 0
 
-/* ─── cursor spotlight on glass cards ─── */
-document.querySelectorAll('.g').forEach(card => {
-    card.addEventListener('pointermove', e => {
-        const r = card.getBoundingClientRect();
-        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
-    });
-});
+            // Where the text column starts
+            const content = panels[index] && panels[index].querySelector('.section-content');
+            const colLeft = content ? content.getBoundingClientRect().left : w * 0.5;
 
-/* ─── interactive dot field (hero) ─── */
-(function () {
-    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const cv = document.getElementById('dots');
-    const ctx = cv.getContext('2d');
-    let W, H, pts = [], mouse = { x:-9999, y:-9999 };
-    const GAP = 46;
+            const GAP = 52;                                          // clear space between shape and text
+            const regionL = w * 0.035;
+            const regionR = colLeft - GAP;
+            const freeW = regionR - regionL;
 
-    function build() {
-        const hero = document.getElementById('hero');
-        W = cv.width  = hero.offsetWidth;
-        H = cv.height = hero.offsetHeight;
-        pts = [];
-        for (let y = GAP; y < H; y += GAP)
-            for (let x = GAP; x < W; x += GAP)
-                pts.push({ x, y, ox:x, oy:y });
-    }
-    build();
-    addEventListener('resize', build);
+            // Section lead stops start bigger, then shrink on subsequent stops
+            const isLead = (index === 0 || index === 1 || index === 4 || index === 7 || index === 8 || index === 10 || index === 11);
+            const maxScale = isLead ? 1.28 : 1.05;
 
-    const heroEl = document.getElementById('hero');
-    heroEl.addEventListener('pointermove', e => {
-        const r = cv.getBoundingClientRect();
-        mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
-    });
-    heroEl.addEventListener('pointerleave', () => { mouse.x = mouse.y = -9999; });
-
-    function frame() {
-        ctx.clearRect(0, 0, W, H);
-        for (const p of pts) {
-            const dx = p.x - mouse.x, dy = p.y - mouse.y;
-            const d = Math.hypot(dx, dy);
-            if (!reduce && d < 130) {
-                const f = (130 - d) / 130;
-                p.x += (dx / (d || 1)) * f * 3.2;
-                p.y += (dy / (d || 1)) * f * 3.2;
+            let x, y, s;
+            if (freeW >= 300) {
+                layoutMode = 'side';
+                const freeH = h - 50 - 50;                             // full vertical window height with top nav removed
+                s = Math.min(maxScale, (freeW * unit) / SHAPE_EXTENT, (freeH * unit) / SHAPE_EXTENT);
+                x = ((regionL + regionR) / 2) * unit - halfW;
+                y = 0;
+            } else {
+                layoutMode = 'stacked';
+                const bandTop = 20, bandBottom = h * 0.36;
+                const bandH = bandBottom - bandTop;
+                s = Math.min(isLead ? 1.22 : 1.05, (bandH * unit) / SHAPE_EXTENT, (w * 0.85 * unit) / SHAPE_EXTENT);
+                x = 0;
+                y = halfH - ((bandTop + bandBottom) / 2) * unit;
             }
-            p.x += (p.ox - p.x) * 0.08;
-            p.y += (p.oy - p.y) * 0.08;
-            const near = d < 170;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, near ? 1.7 : 1, 0, 7);
-            ctx.fillStyle = near ? 'rgba(0,212,255,.75)' : 'rgba(255,255,255,.14)';
-            ctx.fill();
-        }
-        requestAnimationFrame(frame);
-    }
-    if (!reduce) frame();
-    else { // static render
-        for (const p of pts) { ctx.beginPath(); ctx.arc(p.x,p.y,1,0,7); ctx.fillStyle='rgba(255,255,255,.14)'; ctx.fill(); }
-    }
-})();
 
-/* ─── darkroom camera ─── */
-(function () {
-    const reduce  = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const shutter = document.getElementById('shutter');
-    const flashEl = document.getElementById('camFlash');
-    const flashFx = document.getElementById('flashfx');
-    const counter = document.getElementById('camCounter');
-    const shots   = document.getElementById('shots');
-    let exp = 24, frame = 0;
+            document.documentElement.classList.toggle('stacked', layoutMode === 'stacked');
 
-    const PALS = [
-        { sky:['#ffd9a0','#ff8f6b','#8b5bb5'], sun:'#fff3d6', ridge:['#4a3a66','#37294f','#26193a','#150e24'], stars:false, leak:'255,120,60'  },
-        { sky:['#0b1030','#1b2b5e','#31447f'], sun:'#e8ecff', ridge:['#141a3d','#0e1230','#090c22','#050614'], stars:true,  leak:'120,140,255' },
-        { sky:['#a8d8ea','#dcefe9','#f7f4e8'], sun:'#fffbe0', ridge:['#5b7a8c','#41586b','#2c3d4d','#1b2836'], stars:false, leak:'255,220,150' },
-        { sky:['#ff6f91','#ffc75f','#f9f871'], sun:'#ffffff', ridge:['#845ec2','#5b4a9e','#3c3178','#241c4f'], stars:false, leak:'255,80,160'  },
-        { sky:['#2c5364','#0f2027','#0a1418'], sun:'#c7f5e8', ridge:['#1d3b40','#142b30','#0d1e22','#071215'], stars:true,  leak:'80,255,200'  }
-    ];
-    const CAPS = ['golden hr','ridge line','trail 07','no retakes','bc backcountry','iso 400','light leak','last frame'];
-
-    function rnd(a, b) { return a + Math.random() * (b - a); }
-
-    function genScene(cv) {
-        const s = 248; cv.width = s; cv.height = s;
-        const x = cv.getContext('2d');
-        const P = PALS[Math.floor(Math.random() * PALS.length)];
-
-        const sky = x.createLinearGradient(0, 0, 0, s);
-        sky.addColorStop(0, P.sky[0]); sky.addColorStop(.55, P.sky[1]); sky.addColorStop(1, P.sky[2]);
-        x.fillStyle = sky; x.fillRect(0, 0, s, s);
-
-        if (P.stars) {
-            x.fillStyle = 'rgba(255,255,255,.9)';
-            for (let i = 0; i < 70; i++) {
-                x.globalAlpha = rnd(.2, .9);
-                x.fillRect(rnd(0, s), rnd(0, s * .5), 1, 1);
+            if (animateIt && window.gsap && !reduceMotion) {
+                gsap.to(morphPoints.position, { x, y, z: 0, duration: 0.65, ease: 'power2.out', overwrite: true });
+                gsap.to(morphPoints.scale, { x: s, y: s, z: s, duration: 0.65, ease: 'power2.out', overwrite: true });
+            } else {
+                morphPoints.position.set(x, y, 0);
+                morphPoints.scale.setScalar(s);
             }
-            x.globalAlpha = 1;
         }
 
-        const sx = rnd(s*.18, s*.82), sy = rnd(s*.14, s*.32), sr = rnd(s*.05, s*.1);
-        x.save(); x.shadowColor = P.sun; x.shadowBlur = 26;
-        x.fillStyle = P.sun; x.beginPath(); x.arc(sx, sy, sr, 0, 7); x.fill(); x.restore();
+        const POINT_COUNT = isMobile ? 9000 : 26000;
+        const mouse = { x: 0, y: 0 };
+        const mouseTarget = { x: 0, y: 0 };
 
-        for (let r = 0; r < 4; r++) {
-            const base = s * (.42 + r * .15);
-            x.fillStyle = P.ridge[r];
-            x.beginPath(); x.moveTo(0, base + rnd(-8, 8));
-            let y = base;
-            for (let px = 0; px <= s; px += 6) {
-                y += rnd(-8, 8);
-                y = Math.max(base - s*.09, Math.min(base + s*.06, y));
-                x.lineTo(px, y);
+        const morphUniforms = {
+            morphRatio: { value: 0.0 },
+            uBaseColor: { value: new THREE.Color('#ff5a1f') },
+            uAccentColor: { value: new THREE.Color('#ffffff') },
+            uPointSize: { value: isMobile ? 2.2 : 2.8 }
+        };
+
+        const shapePositions = {};
+
+        /* ══════════════════════════════════════════════════════════
+           PRIMITIVE TOOLKIT (Batch 5 Part C1)
+           ══════════════════════════════════════════════════════════ */
+        const TAU = Math.PI * 2;
+
+        const line = (a, b) => ({
+            w: Math.hypot(b[0] - a[0], b[1] - a[1], (b[2] || 0) - (a[2] || 0)),
+            f: () => {
+                const t = Math.random();
+                return [
+                    a[0] + (b[0] - a[0]) * t,
+                    a[1] + (b[1] - a[1]) * t,
+                    (a[2] || 0) + ((b[2] || 0) - (a[2] || 0)) * t
+                ];
             }
-            x.lineTo(s, s); x.lineTo(0, s); x.closePath(); x.fill();
+        });
+
+        const poly = (pts, closed = true) =>
+            pts.slice(0, closed ? pts.length : -1).map((p, i) => line(p, pts[(i + 1) % pts.length]));
+
+        const rect = (x0, y0, x1, y1) => poly([[x0, y0], [x1, y0], [x1, y1], [x0, y1]]);
+
+        const arc = (cx, cy, r, a0 = 0, a1 = TAU) => ({
+            w: Math.abs(a1 - a0) * r,
+            f: () => {
+                const a = a0 + Math.random() * (a1 - a0);
+                return [cx + Math.cos(a) * r, cy + Math.sin(a) * r, 0];
+            }
+        });
+
+        const disc = (cx, cy, r) => ({
+            w: r * r * 6,
+            f: () => {
+                const a = Math.random() * TAU, q = Math.sqrt(Math.random()) * r;
+                return [cx + Math.cos(a) * q, cy + Math.sin(a) * q, 0];
+            }
+        });
+
+        const sector = (r, a0, a1) => ({
+            w: r * r * (a1 - a0) * 1.5,
+            f: () => {
+                const a = a0 + Math.random() * (a1 - a0), q = Math.sqrt(Math.random()) * r;
+                return [Math.cos(a) * q, Math.sin(a) * q, 0];
+            }
+        });
+
+        const latRing = (y, r) => ({
+            w: TAU * r,
+            f: () => {
+                const a = Math.random() * TAU;
+                return [Math.cos(a) * r, y, Math.sin(a) * r];
+            }
+        });
+
+        const meridian = (R, phi) => ({
+            w: TAU * R,
+            f: () => {
+                const a = Math.random() * TAU;
+                return [Math.cos(a) * R * Math.cos(phi), Math.sin(a) * R, Math.cos(a) * R * Math.sin(phi)];
+            }
+        });
+
+        function build(prims, count, { depth = 0, jitter = 0.012 } = {}) {
+            const list = prims.flat(Infinity);
+            const total = list.reduce((s, p) => s + p.w, 0);
+            const arr = new Float32Array(count * 3);
+            for (let i = 0; i < count; i++) {
+                let r = Math.random() * total, k = 0;
+                while (k < list.length - 1 && (r -= list[k].w) > 0) k++;
+                const p = list[k].f();
+                const z = depth ? (Math.random() < 0.5 ? -depth : depth) : 0;
+                arr[i * 3]     = p[0] + (Math.random() - 0.5) * jitter;
+                arr[i * 3 + 1] = p[1] + (Math.random() - 0.5) * jitter;
+                arr[i * 3 + 2] = (p[2] || 0) + z + (Math.random() - 0.5) * jitter;
+            }
+            return new THREE.BufferAttribute(arr, 3);
         }
 
-        x.globalCompositeOperation = 'screen';
-        const lk = x.createLinearGradient(rnd(0, s), 0, rnd(0, s), s);
-        lk.addColorStop(0, 'rgba(' + P.leak + ',.28)');
-        lk.addColorStop(.5, 'rgba(' + P.leak + ',.05)');
-        lk.addColorStop(1, 'transparent');
-        x.fillStyle = lk; x.fillRect(0, 0, s, s);
-        x.globalCompositeOperation = 'source-over';
+        /* ══════════════════════════════════════════════════════════
+           12 SHAPE DEFINITIONS (Batch 5 Part C2)
+           ══════════════════════════════════════════════════════════ */
+        const N = POINT_COUNT;
+        const ring8 = Array.from({ length: 8 }, (_, k) => k / 8 * TAU);
 
-        for (let i = 0; i < 1400; i++) {
-            x.globalAlpha = rnd(.02, .09);
-            x.fillStyle = Math.random() > .5 ? '#fff' : '#000';
-            x.fillRect(rnd(0, s), rnd(0, s), 1, 1);
+        // 1. Intro (Shield with checkmark)
+        shapePositions.shield = build([
+            poly([[-0.9, 1.0], [0, 1.2], [0.9, 1.0], [0.9, 0.0], [0.6, -0.6], [0, -1.2], [-0.6, -0.6], [-0.9, 0.0]]),
+            line([-0.35, 0.05], [-0.08, -0.25]), line([-0.08, -0.25], [0.42, 0.4])
+        ], N, { depth: 0.12 });
+
+        // 2. Fortinet (Endpoint monitor with detection pulse)
+        shapePositions.monitor = build([
+            rect(-1.2, -0.4, 1.2, 1.0),
+            line([0, -0.4], [0, -0.85]), line([-0.5, -0.85], [0.5, -0.85]),
+            poly([[-0.9, 0.3], [-0.4, 0.3], [-0.25, 0.65], [-0.05, -0.1], [0.15, 0.5], [0.3, 0.3], [0.9, 0.3]], false)
+        ], N, { depth: 0.08 });
+
+        // 3. TLC Solutions (Central technician hub & client spokes)
+        shapePositions.hub = build([
+            disc(0, 0, 0.22),
+            ring8.map(a => [
+                arc(Math.cos(a) * 1.1, Math.sin(a) * 1.1, 0.14),
+                line([Math.cos(a) * 0.24, Math.sin(a) * 0.24], [Math.cos(a) * 0.96, Math.sin(a) * 0.96])
+            ])
+        ], N, { depth: 0.06 });
+
+        // 4. Earlier roles (Steps climbing upward with growth arrow)
+        shapePositions.steps = build([
+            [0, 1, 2, 3].map(i => rect(-1.1 + i * 0.58, -0.9, -0.62 + i * 0.58, -0.5 + i * 0.45)),
+            line([-1.1, -0.2], [1.15, 1.15]), line([1.15, 1.15], [0.85, 1.1]), line([1.15, 1.15], [1.1, 0.85])
+        ], N, { depth: 0.1 });
+
+        // 5. Sentinel Honeypot (Global threat detection sphere)
+        shapePositions.globe = build([
+            [-0.9, -0.5, 0, 0.5, 0.9].map(y => latRing(y, Math.sqrt(1.15 * 1.15 - y * y))),
+            [0, 1, 2, 3].map(k => meridian(1.15, k * Math.PI / 4)),
+            line([0.5, 0.62, 0.8], [0.78, 0.97, 1.25])
+        ], N);
+
+        // 6. SOC Simulator (Radar detection sweep with blips)
+        shapePositions.radar = build([
+            [0.35, 0.7, 1.05, 1.3].map(r => arc(0, 0, r)),
+            line([-1.3, 0], [1.3, 0]), line([0, -1.3], [0, 1.3]),
+            sector(1.3, 0.35, 1.05),
+            disc(0.6, -0.5, 0.06), disc(-0.7, 0.4, 0.06), disc(-0.2, -0.85, 0.05)
+        ], N, { depth: 0.03 });
+
+        // 7. ClauseGuard (Document with magnifying glass analyzing terms)
+        shapePositions.document = build([
+            poly([[-0.75, 1.2], [0.4, 1.2], [0.75, 0.85], [0.75, -1.2], [-0.75, -1.2]]),
+            line([0.4, 1.2], [0.4, 0.85]), line([0.4, 0.85], [0.75, 0.85]),
+            [0.55, 0.25, -0.05, -0.35].map(y => line([-0.5, y], [0.5, y])), line([-0.5, -0.65], [0.0, -0.65]),
+            arc(0.45, -0.55, 0.38), line([0.72, -0.82], [1.05, -1.15])
+        ], N, { depth: 0.06 });
+
+        // 8. Homelab Fortress (Server rack units with indicators)
+        shapePositions.rack = build([
+            rect(-0.95, -1.2, 0.95, 1.2),
+            [-1.05, -0.5, 0.05, 0.6].map(y => [
+                rect(-0.8, y, 0.8, y + 0.42),
+                disc(-0.6, y + 0.21, 0.05), disc(-0.42, y + 0.21, 0.05),
+                line([0, y + 0.21], [0.65, y + 0.21])
+            ])
+        ], N, { depth: 0.35 });
+
+        // 9. Skills (Precision mechanical gear)
+        shapePositions.gear = build([
+            poly(Array.from({ length: 40 }, (_, k) => {
+                const a = k / 40 * TAU, r = (k % 4 < 2) ? 1.2 : 0.95;
+                return [Math.cos(a) * r, Math.sin(a) * r];
+            })),
+            arc(0, 0, 0.45)
+        ], N, { depth: 0.1 });
+
+        // 10. Certifications (Honor medal with ribbon)
+        shapePositions.medal = build([
+            arc(0, 0.25, 0.75), arc(0, 0.25, 0.6),
+            poly(Array.from({ length: 10 }, (_, k) => {
+                const a = Math.PI / 2 + k / 10 * TAU, r = k % 2 ? 0.18 : 0.42;
+                return [Math.cos(a) * r, 0.25 + Math.sin(a) * r];
+            })),
+            poly([[-0.45, -0.35], [-0.7, -1.25], [-0.35, -1.0], [-0.1, -1.25], [-0.05, -0.5]], false),
+            poly([[0.45, -0.35], [0.7, -1.25], [0.35, -1.0], [0.1, -1.25], [0.05, -0.5]], false)
+        ], N, { depth: 0.06 });
+
+        // 11. Off the clock (BC backcountry mountain range with sun)
+        shapePositions.mountains = build([
+            poly([[-1.3, -0.8], [-0.55, 0.55], [-0.1, -0.15], [0.45, 0.95], [1.3, -0.8]]),
+            poly([[-1.3, -0.8], [-0.95, -0.2], [-0.6, -0.8]], false),
+            arc(-0.9, 0.95, 0.22)
+        ], N, { depth: 0.15 });
+
+        // 12. Contact (Secure postal envelope)
+        shapePositions.envelope = build([
+            rect(-1.2, -0.75, 1.2, 0.75),
+            line([-1.2, 0.75], [0, -0.05]), line([0, -0.05], [1.2, 0.75]),
+            line([-1.2, -0.75], [-0.35, 0.0]), line([1.2, -0.75], [0.35, 0.0])
+        ], N, { depth: 0.06 });
+
+        function init() {
+            try {
+                const canvasContainer = document.getElementById('three-canvas-container');
+                if (!canvasContainer) return;
+
+                scene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+                camera.position.set(0, 0, 3.2);
+
+                renderer = new THREE.WebGLRenderer({ alpha: true, antialias: !isMobile });
+                if (!renderer.getContext()) {
+                    document.documentElement.classList.add('no-webgl');
+                    return;
+                }
+
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+                renderer.setClearColor(0x000000, 0);
+                canvasContainer.appendChild(renderer.domElement);
+
+                // Morph Particle Cloud
+                const morphGeo = new THREE.BufferGeometry();
+                morphGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(POINT_COUNT * 3), 3));
+                morphGeo.setAttribute('positionStart', shapePositions.shield.clone());
+                morphGeo.setAttribute('positionEnd', shapePositions.shield.clone());
+
+                startAttr = morphGeo.getAttribute('positionStart');
+                endAttr = morphGeo.getAttribute('positionEnd');
+                targetShapeKey = 'shield';
+
+                const morphVertShader = `
+                    attribute vec3 positionStart;
+                    attribute vec3 positionEnd;
+                    uniform float morphRatio;
+                    uniform float uPointSize;
+
+                    void main() {
+                        vec3 mixedPos = mix(positionStart, positionEnd, morphRatio);
+                        vec4 mvPosition = modelViewMatrix * vec4(mixedPos, 1.0);
+                        gl_PointSize = uPointSize * (3.0 / -mvPosition.z);
+                        gl_Position = projectionMatrix * mvPosition;
+                    }
+                `;
+
+                const morphFragShader = `
+                    uniform vec3 uBaseColor;
+                    uniform vec3 uAccentColor;
+                    uniform float morphRatio;
+
+                    void main() {
+                        float dist = distance(gl_PointCoord, vec2(0.5, 0.5));
+                        if (dist > 0.5) discard;
+                        float alpha = smoothstep(0.5, 0.15, dist);
+                        float flash = sin(morphRatio * 3.14159265);
+                        vec3 finalColor = mix(uBaseColor, uAccentColor, flash * 0.5);
+                        gl_FragColor = vec4(finalColor, alpha * 0.85);
+                    }
+                `;
+
+                const morphMat = new THREE.ShaderMaterial({
+                    uniforms: morphUniforms,
+                    vertexShader: morphVertShader,
+                    fragmentShader: morphFragShader,
+                    transparent: true,
+                    depthWrite: false,
+                    blending: THREE.AdditiveBlending
+                });
+
+                morphPoints = new THREE.Points(morphGeo, morphMat);
+                morphPoints.frustumCulled = false;
+
+                scene.add(morphPoints);
+                layoutShape(false);
+
+                window.addEventListener('resize', onWindowResize);
+                window.addEventListener('pointermove', onPointerMove);
+
+                webGlReady = true;
+                animate();
+            } catch (e) {
+                console.warn('WebGL initialization skipped:', e);
+                document.documentElement.classList.add('no-webgl');
+            }
         }
-        x.globalAlpha = 1;
 
-        const vg = x.createRadialGradient(s/2, s/2, s*.35, s/2, s/2, s*.75);
-        vg.addColorStop(0, 'transparent'); vg.addColorStop(1, 'rgba(5,5,15,.6)');
-        x.fillStyle = vg; x.fillRect(0, 0, s, s);
-    }
-
-    shutter.addEventListener('click', () => {
-        frame++; exp--;
-        if (exp < 0) exp = 23;
-        counter.textContent = String(exp).padStart(2, '0');
-
-        if (!reduce) {
-            flashEl.classList.add('on');
-            flashFx.classList.remove('pop'); void flashFx.offsetWidth;
-            flashFx.classList.add('pop');
-            setTimeout(() => flashEl.classList.remove('on'), 160);
+        function onPointerMove(e) {
+            if (reduceMotion || e.pointerType === 'touch') return;
+            mouseTarget.x = (e.clientX / window.innerWidth - 0.5) * 2;
+            mouseTarget.y = -(e.clientY / window.innerHeight - 0.5) * 2;
         }
 
-        const shot = document.createElement('div');
-        shot.className = 'shot';
-        shot.style.setProperty('--r', rnd(-4, 4).toFixed(1) + 'deg');
-        const cv = document.createElement('canvas');
-        const cap = document.createElement('div');
-        cap.className = 'cap';
-        cap.textContent = CAPS[Math.floor(Math.random() * CAPS.length)] + ' · ' + String(frame).padStart(2, '0');
-        shot.appendChild(cv); shot.appendChild(cap);
-        genScene(cv);
-        shots.prepend(shot);
-        requestAnimationFrame(() => requestAnimationFrame(() => shot.classList.add('dev')));
-        while (shots.children.length > 3) shots.removeChild(shots.lastChild);
-    });
-})();
+        let lastWidth = window.innerWidth;
+        let lastHeight = window.innerHeight;
+        function onWindowResize() {
+            if (window.innerWidth === lastWidth && Math.abs(window.innerHeight - lastHeight) < 120) return;
+            lastWidth = window.innerWidth;
+            lastHeight = window.innerHeight;
 
-/* ─── local time ─── */
-const clock = document.getElementById('clock');
-function tick() {
-    clock.textContent = 'Local — ' + new Date().toLocaleTimeString('en-CA', { timeZone:'America/Vancouver', hour:'2-digit', minute:'2-digit' }) + ' PT';
-}
-tick(); setInterval(tick, 30000);
-</script>
-<!-- built 2026 -->
+            if (camera && renderer) {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
 
-<script>
-function handleFormSubmit(form, e) {
-  e.preventDefault();
-  const btn = form.querySelector('button[type="submit"]');
-  const status = form.querySelector('.form-status') || document.createElement('div');
-  if (!form.querySelector('.form-status')) { status.className='form-status'; status.setAttribute('aria-live','polite'); form.insertBefore(status, btn); }
-  btn.disabled = true; btn.textContent = 'Sending...';
-  const data = new FormData(form);
-  fetch('https://formsubmit.co/59add3f...', {method:'POST', body:data, mode:'no-cors'})
-    .then(()=>{ status.textContent='Message sent. I will reply within 48 hours.'; status.style.color='#6ee7b7'; btn.textContent='Sent'; })
-    .catch(()=>{ status.textContent='Send failed. Please try again.'; status.style.color='#ff6b6b'; btn.disabled=false; btn.textContent='Send message'; });
-  return false;
-}
-</script>
-<script>function openLab(btn){const p=btn.previousElementSibling||btn.parentElement.querySelector(".lab-para");if(p){p.classList.toggle("open");btn.textContent=p.classList.contains("open")?"Collapse details":"Read more";}}</script></body>
+            layoutShape(false);
+        }
+
+        /* ----------------------------------------------------
+           MORPH LOGIC (In-between positions baked, no snap)
+        ---------------------------------------------------- */
+        function triggerMorph(targetKey) {
+            if (!webGlReady || !morphUniforms) return;
+            const target = shapePositions[targetKey];
+            if (!target || targetKey === targetShapeKey) return;
+
+            // Bake current on-screen coordinates into start buffer
+            const r = morphUniforms.morphRatio.value;
+            const s = startAttr.array;
+            const e = endAttr.array;
+            for (let i = 0; i < s.length; i++) {
+                s[i] += (e[i] - s[i]) * r;
+            }
+
+            e.set(target.array);
+            startAttr.needsUpdate = true;
+            endAttr.needsUpdate = true;
+            targetShapeKey = targetKey;
+
+            if (window.gsap) {
+                gsap.killTweensOf(morphUniforms.morphRatio);
+                morphUniforms.morphRatio.value = 0;
+                gsap.to(morphUniforms.morphRatio, {
+                    value: 1,
+                    duration: reduceMotion ? 0 : 1.2,
+                    ease: "power2.inOut"
+                });
+            } else {
+                morphUniforms.morphRatio.value = 1;
+            }
+        }
+
+        /* ══════════════════════════════════════════════════════════
+           STEP SCROLLING CONTROLLER (Batch 5 Part B3)
+           ══════════════════════════════════════════════════════════ */
+        const panels = Array.from(document.querySelectorAll('.panel'));
+        const counter = document.querySelector('.step-counter');
+        let index = 0;
+        let locked = false;
+        let stepped = false;
+
+        /* ---- Scene: shape + colour for a stop (used in both modes) ---- */
+        function applyScene(i) {
+            const p = panels[i];
+            if (!p) return;
+            const hex = p.dataset.color || '#ff5a1f';
+            document.documentElement.style.setProperty('--accent', hex);
+
+            if (webGlReady) {
+                triggerMorph(p.dataset.shape);
+                layoutShape(true);
+                const c = new THREE.Color(hex);
+                const u = morphUniforms.uBaseColor.value;
+                if (window.gsap && !reduceMotion) {
+                    gsap.to(u, { r: c.r, g: c.g, b: c.b, duration: 1.0, ease: 'power2.inOut' });
+                } else {
+                    u.copy(c);
+                }
+            }
+
+            const canvas = document.getElementById('three-canvas-container');
+            if (canvas) canvas.style.opacity = '1';
+
+            updateRail(i);
+
+            if (counter) {
+                counter.innerHTML = `<b>${String(i + 1).padStart(2, '0')}</b> / ${String(panels.length).padStart(2, '0')} · ${p.dataset.label}`;
+            }
+        }
+
+        /* ---- Step transition ---- */
+        function goTo(next) {
+            if (locked || next === index || next < 0 || next >= panels.length) return;
+            locked = true;
+
+            const dir = next > index ? 1 : -1;
+            const from = panels[index];
+            const to = panels[next];
+            const fromC = from.querySelector('.section-content');
+            const toC = to.querySelector('.section-content');
+
+            to.scrollTop = 0;
+            to.classList.add('is-active');
+            to.inert = false;
+
+            index = next;
+            applyScene(next);
+            try { history.replaceState(null, '', '#' + to.id); } catch (err) { /* preview iframes and file:// can refuse this */ }
+
+            let tl = null;
+            let lockTimer = null;
+            const finish = () => {
+                if (!locked) return;
+                clearTimeout(lockTimer);
+                if (tl) tl.kill();
+                from.classList.remove('is-active');
+                from.inert = true;
+                if (window.gsap) gsap.set([fromC, toC], { clearProps: 'opacity,transform' });
+                const h = to.querySelector('h1, h2');
+                if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
+                locked = false;
+            };
+
+            if (window.gsap && !reduceMotion) {
+                lockTimer = setTimeout(finish, 1400);     // the lock can never get stuck
+                tl = gsap.timeline({ onComplete: finish })
+                    .to(fromC, { opacity: 0, y: -30 * dir, duration: 0.25, ease: 'power2.in' })
+                    .fromTo(toC, { opacity: 0, y: 40 * dir }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' });
+            } else {
+                finish();
+            }
+        }
+
+        /* ---- Is the active stop scrolled to its edge in this direction? ---- */
+        function atEdge(dir) {
+            const p = panels[index];
+            if (!p) return true;
+            return dir > 0 ? (p.scrollTop + p.clientHeight >= p.scrollHeight - 2) : (p.scrollTop <= 0);
+        }
+
+        /* ---- Input: wheel and trackpad ---- */
+        const STEP_THRESHOLD = 30;   // px of scroll intent needed to step
+        const GAP_MS = 140;          // silence that ends a gesture
+        let acc = 0, accDir = 0;     // intent accumulated in the current gesture
+        let lastT = 0, lastAbs = 0;
+        let coasting = false;        // leftover momentum from the previous step (or from scrolling inside a tall stop) is still arriving
+        let coastDir = 0;
+
+        function onWheel(e) {
+            if (e.ctrlKey) return;   // ctrlKey = pinch zoom
+
+            let dy = e.deltaY;
+            if (e.deltaMode === 1) dy *= 32;                       // lines (Firefox mouse wheel)
+            else if (e.deltaMode === 2) dy *= window.innerHeight;  // pages
+            if (dy === 0 || Math.abs(e.deltaX) > Math.abs(dy)) return;
+
+            const now = performance.now();
+            const dir = dy > 0 ? 1 : -1;
+            const abs = Math.abs(dy);
+            const gap = now - lastT;
+            const prevAbs = lastAbs;
+            lastT = now;
+            lastAbs = abs;
+
+            // During a transition: swallow everything and remember that momentum is in flight
+            if (locked) { e.preventDefault(); coasting = true; coastDir = dir; return; }
+
+            // Tall stop that can still scroll this way: let it scroll natively.
+            // Reaching its edge inside this same gesture must not advance.
+            if (!atEdge(dir)) { acc = 0; coasting = true; coastDir = dir; return; }
+
+            e.preventDefault();
+
+            // Ignore leftover momentum until the visitor clearly acts again:
+            // a pause, a change of direction, or a fresh push (sudden jump in speed)
+            if (coasting) {
+                const fresh = gap > GAP_MS || dir !== coastDir || abs > prevAbs * 1.6 + 6;
+                if (!fresh) return;
+                coasting = false;
+                acc = 0;
+            }
+
+            if (gap > GAP_MS || dir !== accDir) acc = 0;
+            accDir = dir;
+            acc += abs;
+
+            if (acc >= STEP_THRESHOLD) {
+                acc = 0;
+                coasting = true;
+                coastDir = dir;
+                goTo(index + dir);
+            }
+        }
+
+        /* ---- Input: touch ---- */
+        let touchY = 0, touchTop = false, touchBottom = false;
+        function onTouchStart(e) {
+            touchY = e.touches[0].clientY;
+            touchTop = atEdge(-1);
+            touchBottom = atEdge(1);
+        }
+        function onTouchEnd(e) {
+            if (locked) return;
+            const dy = e.changedTouches[0].clientY - touchY;
+            if (Math.abs(dy) < 50) return;
+            if (dy < 0 && touchBottom) goTo(index + 1);
+            else if (dy > 0 && touchTop) goTo(index - 1);
+        }
+
+        /* ---- Input: keyboard ---- */
+        function onKey(e) {
+            const t = e.target;
+            const typing = t.matches('input, textarea, select');
+            const onControl = t.matches('button, a');
+            if (typing || e.altKey || e.ctrlKey || e.metaKey) return;
+            let next = null;
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') next = index + 1;
+            else if (e.key === 'ArrowUp' || e.key === 'PageUp') next = index - 1;
+            else if (e.key === ' ' && !onControl) next = index + (e.shiftKey ? -1 : 1);
+            else if (e.key === 'Home') next = 0;
+            else if (e.key === 'End') next = panels.length - 1;
+            if (next === null) return;
+            e.preventDefault();
+            goTo(next);
+        }
+
+        /* ---- Links, rail, deep links ---- */
+        function indexOfId(id) {
+            return panels.findIndex(p => p.id === id);
+        }
+
+        function bindLinks() {
+            document.querySelectorAll('a[href^="#"]').forEach(a => {
+                a.addEventListener('click', e => {
+                    const href = a.getAttribute('href');
+                    if (!href || href === '#') return;
+                    const i = indexOfId(href.slice(1));
+                    if (i < 0) return;
+                    e.preventDefault();
+                    if (stepped) goTo(i);
+                    else panels[i].scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+                });
+            });
+        }
+
+        /* ---- Build Rail with Cluster Gaps ---- */
+        function buildRail() {
+            const railContainer = document.getElementById("section-rail");
+            if (!railContainer) return;
+            railContainer.innerHTML = '';
+            let prevGroup = null;
+
+            panels.forEach((p, i) => {
+                const group = p.dataset.group;
+                if (prevGroup && group !== prevGroup) {
+                    const spacer = document.createElement("div");
+                    spacer.style.height = "10px";
+                    railContainer.appendChild(spacer);
+                }
+                prevGroup = group;
+
+                const btn = document.createElement("button");
+                btn.className = "rail-btn";
+                btn.setAttribute("aria-label", `Navigate to ${p.dataset.label}`);
+                btn.innerHTML = `<span class="rail-dot"></span><span class="rail-tooltip">${p.dataset.label}</span>`;
+                btn.addEventListener("click", () => {
+                    if (stepped) goTo(i);
+                    else p.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+                });
+                railContainer.appendChild(btn);
+            });
+        }
+
+        function updateRail(activeIdx) {
+            const railContainer = document.getElementById("section-rail");
+            if (!railContainer) return;
+            const btns = railContainer.querySelectorAll(".rail-btn");
+            btns.forEach((btn, idx) => {
+                const isActive = idx === activeIdx;
+                btn.classList.toggle("active", isActive);
+                if (isActive) btn.setAttribute("aria-current", "true");
+                else btn.removeAttribute("aria-current");
+            });
+        }
+
+        /* ---- Start Stepped Mode ---- */
+        function startStepped() {
+            stepped = true;
+            document.documentElement.classList.add('stepped');
+            const start = Math.max(0, indexOfId(location.hash.slice(1)));
+            panels.forEach((p, i) => {
+                p.classList.toggle('is-active', i === start);
+                p.inert = i !== start;
+            });
+            index = start;
+            applyScene(start);
+            window.addEventListener('wheel', onWheel, { passive: false });
+            window.addEventListener('touchstart', onTouchStart, { passive: true });
+            window.addEventListener('touchend', onTouchEnd, { passive: true });
+            window.addEventListener('touchcancel', () => { touchTop = touchBottom = false; }, { passive: true });
+            window.addEventListener('keydown', onKey);
+        }
+
+        /* ---- Start Fallback (Stacked scrolling) ---- */
+        function startFallback() {
+            document.documentElement.classList.remove('stepped');
+            panels.forEach(p => { p.classList.add('is-active'); p.inert = false; });
+            const canvas = document.getElementById('three-canvas-container');
+            if (canvas) canvas.style.opacity = layoutMode === 'stacked' ? '0.2' : '1';
+            const io = new IntersectionObserver(entries => {
+                entries.forEach(en => {
+                    if (en.isIntersecting) {
+                        index = panels.indexOf(en.target);
+                        applyScene(index);
+                    }
+                });
+            }, { threshold: 0.5 });
+            panels.forEach(p => io.observe(p));
+            const start = Math.max(0, indexOfId(location.hash.slice(1)));
+            applyScene(start);
+        }
+
+        // Tall stops in stacked layout: fade shape when scrolling into band
+        panels.forEach(p => p.addEventListener('scroll', () => {
+            if (p !== panels[index]) return;
+            const canvas = document.getElementById('three-canvas-container');
+            if (canvas) canvas.style.opacity = layoutMode === 'stacked' ? String(Math.max(0, 1 - p.scrollTop / 120)) : '1';
+        }, { passive: true }));
+
+        // Declare clock before calling init() (Bug fix E1)
+        const clock = new THREE.Clock();
+
+        // Initialize Three.js scene
+        init();
+
+        // Build navigation & initialize scroll mode
+        buildRail();
+        bindLinks();
+
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(() => layoutShape(false));
+        }
+
+        let waited = 0;
+        (function boot() {
+            if (reduceMotion) return startFallback();
+            if (window.gsap) return startStepped();
+            if ((waited += 50) > 3000) return startFallback();
+            setTimeout(boot, 50);
+        })();
+
+        // Render Loop
+        function animate() {
+            requestAnimationFrame(animate);
+            if (document.hidden) return;
+
+            const elapsed = clock.getElapsedTime();
+
+            if (!reduceMotion && morphPoints) {
+                mouse.x += (mouseTarget.x - mouse.x) * 0.05;
+                mouse.y += (mouseTarget.y - mouse.y) * 0.05;
+
+                // Slow sway, plus continuous spin only on globe
+                if (targetShapeKey === 'globe') {
+                    morphPoints.rotation.y = elapsed * 0.12 + Math.sin(elapsed * 0.35) * 0.35 + mouse.x * 0.12;
+                } else {
+                    morphPoints.rotation.y = Math.sin(elapsed * 0.35) * 0.35 + mouse.x * 0.12;
+                }
+                morphPoints.rotation.x = Math.sin(elapsed * 0.22) * 0.08 - mouse.y * 0.1;
+            }
+
+            if (renderer && scene && camera) {
+                renderer.render(scene, camera);
+            }
+        }
+    </script>
+
+    <!-- Form Submission Script -->
+    <script>
+        // Form Handling (AJAX with graceful native fallback)
+        (function() {
+            const form = document.getElementById('contact-form');
+            if (!form) return;
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = form.querySelector('button[type="submit"]');
+                const status = form.querySelector('.form-status');
+                
+                btn.disabled = true;
+                btn.textContent = 'SENDING...';
+                if (status) status.textContent = 'Sending message...';
+
+                const data = new FormData(form);
+
+                try {
+                    const res = await fetch('https://formsubmit.co/ajax/59add3f454616cd68040185e2874e3e7', {
+                        method: 'POST',
+                        headers: { 'Accept': 'application/json' },
+                        body: data
+                    });
+                    const json = await res.json().catch(() => null);
+
+                    if (res.ok && json && (json.success === 'true' || json.success === true)) {
+                        btn.textContent = 'MESSAGE SENT';
+                        btn.style.backgroundColor = 'var(--ok)';
+                        btn.style.borderColor = 'var(--ok)';
+                        btn.style.color = '#ffffff';
+                        if (status) status.textContent = 'Message sent successfully.';
+
+                        setTimeout(() => {
+                            form.reset();
+                            btn.disabled = false;
+                            btn.textContent = 'SEND MESSAGE';
+                            btn.style.backgroundColor = '';
+                            btn.style.borderColor = '';
+                            btn.style.color = '';
+                            if (status) status.textContent = '';
+                        }, 4000);
+                    } else {
+                        throw new Error('AJAX endpoint unconfirmed');
+                    }
+                } catch (err) {
+                    // Fall back to native form submission
+                    form.submit();
+                }
+            });
+        })();
+    </script>
+</body>
 </html>
