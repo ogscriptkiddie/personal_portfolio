@@ -4,15 +4,15 @@
     <script>document.documentElement.classList.add('js');</script>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Tanish Rathore — Endpoint Security and Detection</title>
-    <meta name="description" content="Technical Support Specialist at Fortinet (FortiEDR). Detection work in Microsoft Sentinel and KQL, and a homelab with zero open inbound ports.">
+    <title>Tanish Rathore — TAC Engineer &amp; Cybersecurity Portfolio</title>
+    <meta name="description" content="TAC Engineer at Fortinet (FortiEDR). Detection engineering, adversary emulation, SIEM analytics, and zero-trust infrastructure.">
     <link rel="canonical" href="https://tanishr.dev/">
     <meta name="theme-color" content="#0b0c0e">
 
     <!-- Open Graph & Twitter -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Tanish Rathore — Endpoint Security and Detection">
-    <meta property="og:description" content="Technical Support Specialist at Fortinet (FortiEDR). Detection work in Microsoft Sentinel and KQL, and a homelab with zero open inbound ports.">
+    <meta property="og:title" content="Tanish Rathore — TAC Engineer &amp; Cybersecurity Portfolio">
+    <meta property="og:description" content="TAC Engineer at Fortinet (FortiEDR). Detection engineering, adversary emulation, SIEM analytics, and zero-trust infrastructure.">
     <meta property="og:url" content="https://tanishr.dev/">
     <meta property="og:image" content="https://tanishr.dev/images/og.png">
     <meta name="twitter:card" content="summary_large_image">
@@ -27,7 +27,7 @@
       "@context": "https://schema.org",
       "@type": "Person",
       "name": "Tanish Rathore",
-      "jobTitle": "Technical Support Specialist",
+      "jobTitle": "TAC Engineer",
       "worksFor": {
         "@type": "Organization",
         "name": "Fortinet"
@@ -184,15 +184,18 @@
 
         /* Intro: single screen, shape in the top band */
         .stepped.stacked .panel[data-phases="1"] {
-            padding-top: calc(28vh + 14px);
-            padding-top: calc(28dvh + 14px);
+            padding-top: calc(26vh + 8px);
+            padding-top: calc(26dvh + 8px);
+            overflow: hidden;
+            touch-action: none;
         }
 
         /* ---- Screen 1: cover ---- */
         .stepped.stacked .panel.phase-cover {
-            padding-top: 58vh;
-            padding-top: 58dvh;            /* title sits just under the large shape */
+            padding-top: 56vh;
+            padding-top: 56dvh;            /* title sits just under the large shape */
             overflow: hidden;              /* a cover never scrolls */
+            touch-action: none;
         }
 
         .stepped.stacked .panel.phase-cover .stop-title {
@@ -214,8 +217,9 @@
 
         /* ---- Screen 2: detail ---- */
         .stepped.stacked .panel.phase-detail {
-            padding-top: 28px;
-            padding-top: max(28px, env(safe-area-inset-top));
+            padding-top: 24px;
+            padding-top: max(24px, env(safe-area-inset-top));
+            touch-action: pan-y;
         }
 
         .stepped.stacked .panel.phase-detail .stop-title {
@@ -978,9 +982,9 @@
                 </h1>
                 <div class="hero-bar"></div>
                 <div class="hero-summary">
-                    <p>Technical Support Specialist at Fortinet, troubleshooting FortiEDR cases and resolving endpoint security incidents.</p>
-                    <p>Systems and security technician with hands-on MSP experience across Microsoft 365, Entra ID, Intune, and SentinelOne.</p>
-                    <p>Detection engineer building Sentinel threat intelligence pipelines, Elastic SIEM labs, and a zero-trust homelab.</p>
+                    <p>TAC Engineer at Fortinet, troubleshooting enterprise FortiEDR deployments and resolving complex endpoint security incidents.</p>
+                    <p>Passionate about threat research, malware analysis, and understanding adversary tactics from initial access to execution.</p>
+                    <p>Focused on proactive defense—crafting high-fidelity detection rules, threat intelligence pipelines, and zero-trust architectures.</p>
                 </div>
                 <div class="btn-group">
                     <a href="resume.html" class="btn">
@@ -1008,7 +1012,7 @@
                 <div class="stop-body">
                     <div class="section-subcard">
                         <h3 class="subcard-title">FORTINET</h3>
-                        <p class="lead-subtitle">Technical Support Specialist · Burnaby · Oct 2026 – Present</p>
+                        <p class="lead-subtitle">TAC Engineer · Burnaby · Oct 2026 – Present</p>
                         <ul class="role-bullets">
                             <li>
                                 <h4 class="metric">FORTIEDR TROUBLESHOOTING</h4>
@@ -1903,7 +1907,8 @@
         function atEdge(dir) {
             const p = panels[index];
             if (!p) return true;
-            return dir > 0 ? (p.scrollTop + p.clientHeight >= p.scrollHeight - 2) : (p.scrollTop <= 0);
+            if (layoutMode === 'stacked' && (p.dataset.phases === '1' || phase === 0)) return true;
+            return dir > 0 ? (p.scrollTop + p.clientHeight >= p.scrollHeight - 4) : (p.scrollTop <= 4);
         }
 
         /* ---- Input: wheel and trackpad ---- */
@@ -1961,18 +1966,33 @@
         }
 
         /* ---- Input: touch ---- */
-        let touchY = 0, touchTop = false, touchBottom = false;
+        let touchStartY = 0, touchStartX = 0, touchTop = false, touchBottom = false;
         function onTouchStart(e) {
-            touchY = e.touches[0].clientY;
+            if (e.touches.length !== 1) return;
+            touchStartY = e.touches[0].clientY;
+            touchStartX = e.touches[0].clientX;
             touchTop = atEdge(-1);
             touchBottom = atEdge(1);
         }
+        function onTouchMove(e) {
+            if (!touchStartY || locked) return;
+            const dy = e.touches[0].clientY - touchStartY;
+            const dx = e.touches[0].clientX - touchStartX;
+            if (Math.abs(dy) > Math.abs(dx)) {
+                if ((dy < 0 && touchBottom) || (dy > 0 && touchTop)) {
+                    if (e.cancelable) e.preventDefault();
+                }
+            }
+        }
         function onTouchEnd(e) {
-            if (locked) return;
-            const dy = e.changedTouches[0].clientY - touchY;
-            if (Math.abs(dy) < 50) return;
-            if (dy < 0 && touchBottom) step(1);
-            else if (dy > 0 && touchTop) step(-1);
+            if (locked || !touchStartY) return;
+            const dy = e.changedTouches[0].clientY - touchStartY;
+            const dx = e.changedTouches[0].clientX - touchStartX;
+            const wasTop = touchTop, wasBottom = touchBottom;
+            touchStartY = 0;
+            if (Math.abs(dy) < 40 || Math.abs(dx) > Math.abs(dy)) return;
+            if (dy < 0 && wasBottom) step(1);
+            else if (dy > 0 && wasTop) step(-1);
         }
 
         /* ---- Input: keyboard ---- */
@@ -2062,8 +2082,9 @@
             applyScene(start);
             window.addEventListener('wheel', onWheel, { passive: false });
             window.addEventListener('touchstart', onTouchStart, { passive: true });
+            window.addEventListener('touchmove', onTouchMove, { passive: false });
             window.addEventListener('touchend', onTouchEnd, { passive: true });
-            window.addEventListener('touchcancel', () => { touchTop = touchBottom = false; }, { passive: true });
+            window.addEventListener('touchcancel', () => { touchStartY = 0; touchTop = touchBottom = false; }, { passive: true });
             window.addEventListener('keydown', onKey);
         }
 
