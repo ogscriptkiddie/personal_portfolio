@@ -137,6 +137,11 @@
             outline-offset: 3px;
         }
 
+        .panel h1[tabindex="-1"]:focus,
+        .panel h2[tabindex="-1"]:focus {
+            outline: none;
+        }
+
         /* Fixed 3D WebGL Canvas Container */
         #three-canvas-container {
             position: fixed;
@@ -154,10 +159,92 @@
             background: radial-gradient(circle at 30% 40%, #1a1c22, #0b0c0e 70%);
         }
 
-        /* Text starts below the shape band (Stacked layout) */
-        .stepped.stacked .panel { padding-top: calc(34vh + 12px); padding-top: calc(34dvh + 12px); }
-        .stepped.stacked .panel .section-content { margin-block: 0 auto; }   /* top-aligned under the band */
-        .stepped.stacked #hero .section-content { text-align: left; }
+        /* Stacked layout: single-screen Intro + two-screen Cover / Detail (Batch 7) */
+        .stepped.stacked .panel {
+            align-items: center;
+            padding: 0 24px 64px;
+        }
+
+        .stepped.stacked .panel .section-content {
+            margin-block: 0 auto;
+            margin-inline: auto;
+        }
+
+        .stepped.stacked #hero .section-content {
+            text-align: left;
+        }
+
+        .stepped.stacked .hero-bar {
+            margin: 14px 0 18px 0;
+        }
+
+        .stepped.stacked #hero .btn-group {
+            justify-content: flex-start;
+        }
+
+        /* Intro: single screen, shape in the top band */
+        .stepped.stacked .panel[data-phases="1"] {
+            padding-top: calc(28vh + 14px);
+            padding-top: calc(28dvh + 14px);
+        }
+
+        /* ---- Screen 1: cover ---- */
+        .stepped.stacked .panel.phase-cover {
+            padding-top: 58vh;
+            padding-top: 58dvh;            /* title sits just under the large shape */
+            overflow: hidden;              /* a cover never scrolls */
+        }
+
+        .stepped.stacked .panel.phase-cover .stop-title {
+            text-align: center;
+        }
+
+        .stepped.stacked .panel.phase-cover .stop-title h2 {
+            font-size: clamp(2.5rem, 13vw, 3.75rem);
+            margin-bottom: 0;
+        }
+
+        .stepped.stacked .panel.phase-cover .stop-title h2.section-big-title {
+            font-size: clamp(3rem, 15vw, 4.25rem);
+        }
+
+        .stepped.stacked .panel.phase-cover .stop-body {
+            display: none;
+        }
+
+        /* ---- Screen 2: detail ---- */
+        .stepped.stacked .panel.phase-detail {
+            padding-top: 28px;
+            padding-top: max(28px, env(safe-area-inset-top));
+        }
+
+        .stepped.stacked .panel.phase-detail .stop-title {
+            min-height: 64px;              /* same height as the small shape */
+            padding-left: 80px;            /* room for the small shape: 64px + 16px gap */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .stepped.stacked .panel.phase-detail .stop-title .section-kicker {
+            margin-bottom: 2px;
+        }
+
+        .stepped.stacked .panel.phase-detail .stop-title h2,
+        .stepped.stacked .panel.phase-detail .stop-title h2.section-big-title {
+            font-size: clamp(1.5rem, 7.5vw, 2rem);
+            line-height: 1.05;
+            margin-bottom: 0;
+        }
+
+        .stepped.stacked .panel.phase-detail .section-subcard h3.subcard-title {
+            font-size: clamp(1.4rem, 6.5vw, 1.85rem);
+        }
+
+        .stepped.stacked:has(.panel.is-active.phase-detail) .step-counter {
+            display: none;
+        }
 
         /* ══════════════════════════════════════════════════════════
            STEP SCROLLING SYSTEM (Batch 5)
@@ -729,8 +816,11 @@
                 text-align: left;
             }
 
-            .stepped .panel {
-                padding: 0 20px 64px;
+            .stepped .panel,
+            .stepped.stacked .panel {
+                padding-left: 20px;
+                padding-right: 20px;
+                padding-bottom: 64px;
             }
 
             .section-content {
@@ -745,14 +835,17 @@
                 align-items: stretch;
             }
 
-            h1.hero-name { font-size: clamp(3.25rem, 17vw, 5.5rem) !important; }
-            .hero-bar { margin: 16px 0 20px 0; }
+            h1.hero-name { font-size: clamp(2.75rem, 13.5vw, 4.5rem) !important; }
+            .hero-bar { margin: 12px 0 14px 0; }
+            .hero-summary { gap: 8px; margin-bottom: 18px; }
+            .hero-summary p { font-size: 0.9375rem; line-height: 1.45; }
             section h2 { font-size: clamp(2.25rem, 11vw, 3.25rem); }
 
             .btn-group {
                 flex-direction: column;
                 align-items: stretch;
-                gap: 12px;
+                gap: 10px;
+                margin-top: 14px;
             }
 
             #hero .btn-group {
@@ -762,7 +855,8 @@
             .btn {
                 width: 100%;
                 justify-content: center;
-                min-height: 48px;
+                min-height: 44px;
+                padding: 10px 18px;
             }
 
             #section-rail {
@@ -811,19 +905,40 @@
         /* Phone (<= 480px) only */
         @media (max-width: 480px) {
             .panel { padding: 64px 18px; }
-            .stepped .panel { padding: 0 18px 56px; }
+            .stepped .panel,
+            .stepped.stacked .panel {
+                padding-left: 18px;
+                padding-right: 18px;
+                padding-bottom: 56px;
+            }
             .lead-subtitle { font-size: 1rem; }
         }
 
         /* Landscape phones */
         @media (max-height: 500px) and (orientation: landscape) {
-            #hero {
+            html:not(.stepped) #hero {
                 min-height: auto;
-                padding-top: 96px;
+                padding-top: 48px;
                 padding-bottom: 48px;
             }
-            h1.hero-name {
-                font-size: 3rem !important;
+            .stepped.stacked .panel[data-phases="1"] {
+                padding-top: calc(30vh + 8px);
+                padding-top: calc(30dvh + 8px);
+            }
+            .stepped.stacked .panel[data-phases="1"] h1.hero-name {
+                font-size: 2.5rem !important;
+            }
+            .stepped.stacked .panel[data-phases="1"] .hero-summary {
+                gap: 4px;
+                margin-bottom: 12px;
+            }
+            .stepped.stacked .panel[data-phases="1"] .hero-summary p {
+                font-size: 0.875rem;
+                line-height: 1.35;
+            }
+            .stepped.stacked .panel.phase-cover .stop-title h2,
+            .stepped.stacked .panel.phase-cover .stop-title h2.section-big-title {
+                font-size: clamp(2rem, 8vw, 3.25rem);
             }
         }
 
@@ -855,7 +970,7 @@
 
         <!-- 01 HERO -->
         <section class="panel is-active" id="hero"
-                 data-label="Intro" data-group="intro"
+                 data-phases="1" data-label="Intro" data-group="intro"
                  data-shape="shield" data-color="#ff5a1f">
             <div class="section-content">
                 <h1 class="hero-name">
@@ -886,21 +1001,25 @@
                  data-label="Fortinet" data-group="experience"
                  data-shape="monitor" data-color="#ff4f5e">
             <div class="section-content">
-                <span class="section-kicker">Experience · 1 of 3</span>
-                <h2 class="section-big-title">EXPERIENCE</h2>
-                <div class="section-subcard">
-                    <h3 class="subcard-title">FORTINET</h3>
-                    <p class="lead-subtitle">Technical Support Specialist · Burnaby · Oct 2026 – Present</p>
-                    <ul class="role-bullets">
-                        <li>
-                            <h4 class="metric">FORTIEDR TROUBLESHOOTING</h4>
-                            Work customer cases on FortiEDR deployments, from first report through to resolution.
-                        </li>
-                        <li>
-                            <h4 class="metric">BUG COORDINATION</h4>
-                            Escalate confirmed product defects to engineering and track each one through to a fix.
-                        </li>
-                    </ul>
+                <div class="stop-title">
+                    <span class="section-kicker">Experience · 1 of 3</span>
+                    <h2 class="section-big-title">EXPERIENCE</h2>
+                </div>
+                <div class="stop-body">
+                    <div class="section-subcard">
+                        <h3 class="subcard-title">FORTINET</h3>
+                        <p class="lead-subtitle">Technical Support Specialist · Burnaby · Oct 2026 – Present</p>
+                        <ul class="role-bullets">
+                            <li>
+                                <h4 class="metric">FORTIEDR TROUBLESHOOTING</h4>
+                                Work customer cases on FortiEDR deployments, from first report through to resolution.
+                            </li>
+                            <li>
+                                <h4 class="metric">BUG COORDINATION</h4>
+                                Escalate confirmed product defects to engineering and track each one through to a fix.
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>
@@ -910,27 +1029,31 @@
                  data-label="TLC Solutions" data-group="experience"
                  data-shape="hub" data-color="#7c8cff">
             <div class="section-content">
-                <span class="section-kicker">Experience · 2 of 3</span>
-                <h2>TLC SOLUTIONS</h2>
-                <p class="lead-subtitle">Systems and Security Technician · Langley · Apr 2025 – 2026</p>
-                <ul class="role-bullets">
-                    <li>
-                        <h3 class="metric">200+ ENDPOINTS, MANY TENANTS</h3>
-                        Ran an OS refresh and hardening pass across 200+ endpoints for clients in BC, Alberta and California.
-                    </li>
-                    <li>
-                        <h3 class="metric">IDENTITY AND ENDPOINT MANAGEMENT</h3>
-                        Microsoft 365, Entra ID, on-prem AD with Entra Connect, Exchange Online and Intune. Configured SSO and SCIM provisioning through Entra ID for a client SaaS rollout.
-                    </li>
-                    <li>
-                        <h3 class="metric">EDR ALERT TRIAGE</h3>
-                        Triaged SentinelOne alerts, isolated affected machines, and kept patching on schedule through Datto RMM.
-                    </li>
-                    <li>
-                        <h3 class="metric">RUNBOOKS</h3>
-                        Wrote incident and support procedures in Confluence and SharePoint so the next technician could follow them.
-                    </li>
-                </ul>
+                <div class="stop-title">
+                    <span class="section-kicker">Experience · 2 of 3</span>
+                    <h2>TLC SOLUTIONS</h2>
+                </div>
+                <div class="stop-body">
+                    <p class="lead-subtitle">Systems and Security Technician · Langley · Apr 2025 – 2026</p>
+                    <ul class="role-bullets">
+                        <li>
+                            <h3 class="metric">200+ ENDPOINTS, MANY TENANTS</h3>
+                            Ran an OS refresh and hardening pass across 200+ endpoints for clients in BC, Alberta and California.
+                        </li>
+                        <li>
+                            <h3 class="metric">IDENTITY AND ENDPOINT MANAGEMENT</h3>
+                            Microsoft 365, Entra ID, on-prem AD with Entra Connect, Exchange Online and Intune. Configured SSO and SCIM provisioning through Entra ID for a client SaaS rollout.
+                        </li>
+                        <li>
+                            <h3 class="metric">EDR ALERT TRIAGE</h3>
+                            Triaged SentinelOne alerts, isolated affected machines, and kept patching on schedule through Datto RMM.
+                        </li>
+                        <li>
+                            <h3 class="metric">RUNBOOKS</h3>
+                            Wrote incident and support procedures in Confluence and SharePoint so the next technician could follow them.
+                        </li>
+                    </ul>
+                </div>
             </div>
         </section>
 
@@ -939,15 +1062,19 @@
                  data-label="Earlier roles" data-group="experience"
                  data-shape="steps" data-color="#5ad1c0">
             <div class="section-content">
-                <span class="section-kicker">Experience · 3 of 3</span>
-                <h2>EARLIER ROLES</h2>
-                <div class="earlier-entry">
-                    <h3 class="earlier-title">Service Desk Analyst I · University of the Fraser Valley</h3>
-                    <p class="role-body">Supported 1,000+ users and ran campus OS upgrade cycles. Managed devices and access through Intune, Active Directory, SCCM and Exchange. Built security awareness training for faculty and staff, which cut escalations by about 30%.</p>
+                <div class="stop-title">
+                    <span class="section-kicker">Experience · 3 of 3</span>
+                    <h2>EARLIER ROLES</h2>
                 </div>
-                <div class="earlier-entry">
-                    <h3 class="earlier-title">Summer IT Intern · Aviso Wealth</h3>
-                    <p class="role-body">Trained in enterprise IT operations and assisted the Level 3 team with issue resolution.</p>
+                <div class="stop-body">
+                    <div class="earlier-entry">
+                        <h3 class="earlier-title">Service Desk Analyst I · University of the Fraser Valley</h3>
+                        <p class="role-body">Supported 1,000+ users and ran campus OS upgrade cycles. Managed devices and access through Intune, Active Directory, SCCM and Exchange. Built security awareness training for faculty and staff, which cut escalations by about 30%.</p>
+                    </div>
+                    <div class="earlier-entry">
+                        <h3 class="earlier-title">Summer IT Intern · Aviso Wealth</h3>
+                        <p class="role-body">Trained in enterprise IT operations and assisted the Level 3 team with issue resolution.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -957,15 +1084,19 @@
                  data-label="Sentinel Honeypot" data-group="projects"
                  data-shape="globe" data-color="#2ed3e6">
             <div class="section-content">
-                <span class="section-kicker">Projects · 1 of 3</span>
-                <h2 class="section-big-title">PROJECTS</h2>
-                <div class="section-subcard">
-                    <h3 class="subcard-title">SENTINEL HONEYPOT</h3>
-                    <p class="lead-subtitle">Microsoft Sentinel · KQL · Azure</p>
-                    <div class="section-p">
-                        I exposed a honeypot VM on Azure, shipped its sign-in logs to Microsoft Sentinel, and wrote KQL to flag brute-force attempts and plot the source IPs on a world map.
+                <div class="stop-title">
+                    <span class="section-kicker">Projects · 1 of 3</span>
+                    <h2 class="section-big-title">PROJECTS</h2>
+                </div>
+                <div class="stop-body">
+                    <div class="section-subcard">
+                        <h3 class="subcard-title">SENTINEL HONEYPOT</h3>
+                        <p class="lead-subtitle">Microsoft Sentinel · KQL · Azure</p>
+                        <div class="section-p">
+                            I exposed a honeypot VM on Azure, shipped its sign-in logs to Microsoft Sentinel, and wrote KQL to flag brute-force attempts and plot the source IPs on a world map.
+                        </div>
+                        <a href="https://github.com/ogscriptkiddie/Azure-Sentinel_siem" target="_blank" rel="noopener" class="text-link">View source ↗</a>
                     </div>
-                    <a href="https://github.com/ogscriptkiddie/Azure-Sentinel_siem" target="_blank" rel="noopener" class="text-link">View source ↗</a>
                 </div>
             </div>
         </section>
@@ -975,13 +1106,17 @@
                  data-label="SOC Simulator" data-group="projects"
                  data-shape="radar" data-color="#3ddc84">
             <div class="section-content">
-                <span class="section-kicker">Project · 2 of 3</span>
-                <h2>SOC SIMULATOR</h2>
-                <p class="lead-subtitle">Elastic SIEM · Attack simulation · Alert tuning</p>
-                <div class="section-p">
-                    An Elastic SIEM lab where I run reconnaissance, privilege escalation and lateral movement against my own hosts, then tune the detection rules until the alerts that fire are worth reading. Each simulated technique gets a rule, a test, and a tuning pass.
+                <div class="stop-title">
+                    <span class="section-kicker">Project · 2 of 3</span>
+                    <h2>SOC SIMULATOR</h2>
                 </div>
-                <a href="https://github.com/ogscriptkiddie/SOC-Simulator" target="_blank" rel="noopener" class="text-link">View source ↗</a>
+                <div class="stop-body">
+                    <p class="lead-subtitle">Elastic SIEM · Attack simulation · Alert tuning</p>
+                    <div class="section-p">
+                        An Elastic SIEM lab where I run reconnaissance, privilege escalation and lateral movement against my own hosts, then tune the detection rules until the alerts that fire are worth reading. Each simulated technique gets a rule, a test, and a tuning pass.
+                    </div>
+                    <a href="https://github.com/ogscriptkiddie/SOC-Simulator" target="_blank" rel="noopener" class="text-link">View source ↗</a>
+                </div>
             </div>
         </section>
 
@@ -990,13 +1125,17 @@
                  data-label="ClauseGuard" data-group="projects"
                  data-shape="document" data-color="#ff8fb1">
             <div class="section-content">
-                <span class="section-kicker">Project · 3 of 3</span>
-                <h2>CLAUSEGUARD</h2>
-                <p class="lead-subtitle">AI-assisted terms and conditions analyzer</p>
-                <div class="section-p">
-                    Paste in a terms-of-service or privacy policy and ClauseGuard flags the clauses worth reading before you click accept.
+                <div class="stop-title">
+                    <span class="section-kicker">Project · 3 of 3</span>
+                    <h2>CLAUSEGUARD</h2>
                 </div>
-                <a href="https://github.com/ogscriptkiddie/clauseguard" target="_blank" rel="noopener" class="text-link">View source ↗</a>
+                <div class="stop-body">
+                    <p class="lead-subtitle">AI-assisted terms and conditions analyzer</p>
+                    <div class="section-p">
+                        Paste in a terms-of-service or privacy policy and ClauseGuard flags the clauses worth reading before you click accept.
+                    </div>
+                    <a href="https://github.com/ogscriptkiddie/clauseguard" target="_blank" rel="noopener" class="text-link">View source ↗</a>
+                </div>
             </div>
         </section>
 
@@ -1005,33 +1144,37 @@
                  data-label="Homelab" data-group="homelab"
                  data-shape="rack" data-color="#a78bfa">
             <div class="section-content">
-                <span class="section-kicker">Homelab</span>
-                <h2>FORTRESS</h2>
-                <p class="lead-subtitle">Zero open inbound ports · 25+ services</p>
-                <div class="section-p">
-                    My home server: Ubuntu 24.04 running 25+ containers across three isolated Docker networks. Nothing is port-forwarded. Public traffic comes in through a Cloudflare Tunnel; private access goes over Tailscale.
+                <div class="stop-title">
+                    <span class="section-kicker">Homelab</span>
+                    <h2>FORTRESS</h2>
                 </div>
-                <div class="tech-hud">
-                    <div class="hud-title">Architecture</div>
-                    <div class="hud-row">
-                        <span class="hud-label">Ingress:</span>
-                        <span class="hud-val">Cloudflare Tunnel → Traefik TLS</span>
+                <div class="stop-body">
+                    <p class="lead-subtitle">Zero open inbound ports · 25+ services</p>
+                    <div class="section-p">
+                        My home server: Ubuntu 24.04 running 25+ containers across three isolated Docker networks. Nothing is port-forwarded. Public traffic comes in through a Cloudflare Tunnel; private access goes over Tailscale.
                     </div>
-                    <div class="hud-row">
-                        <span class="hud-label">Security:</span>
-                        <span class="hud-val">CrowdSec IPS · Authelia 2FA</span>
-                    </div>
-                    <div class="hud-row">
-                        <span class="hud-label">Private mesh:</span>
-                        <span class="hud-val">Tailscale · Split-DNS</span>
-                    </div>
-                    <div class="hud-row">
-                        <span class="hud-label">Telemetry:</span>
-                        <span class="hud-val">Prometheus · Grafana · Loki</span>
-                    </div>
-                    <div class="hud-row">
-                        <span class="hud-label">Backups:</span>
-                        <span class="hud-val">Restic off-site · SOPS + age encryption</span>
+                    <div class="tech-hud">
+                        <div class="hud-title">Architecture</div>
+                        <div class="hud-row">
+                            <span class="hud-label">Ingress:</span>
+                            <span class="hud-val">Cloudflare Tunnel → Traefik TLS</span>
+                        </div>
+                        <div class="hud-row">
+                            <span class="hud-label">Security:</span>
+                            <span class="hud-val">CrowdSec IPS · Authelia 2FA</span>
+                        </div>
+                        <div class="hud-row">
+                            <span class="hud-label">Private mesh:</span>
+                            <span class="hud-val">Tailscale · Split-DNS</span>
+                        </div>
+                        <div class="hud-row">
+                            <span class="hud-label">Telemetry:</span>
+                            <span class="hud-val">Prometheus · Grafana · Loki</span>
+                        </div>
+                        <div class="hud-row">
+                            <span class="hud-label">Backups:</span>
+                            <span class="hud-val">Restic off-site · SOPS + age encryption</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1042,21 +1185,24 @@
                  data-label="Skills" data-group="skills"
                  data-shape="gear" data-color="#b8e04a">
             <div class="section-content">
-                <span class="section-kicker">Capabilities · 1 of 2</span>
-                <h2 class="section-big-title">SKILLS</h2>
-
-                <div class="skills-grid">
-                    <div class="skill-group">
-                        <h3 class="skill-heading">DETECTION AND EDR</h3>
-                        <p class="skill-list">FortiEDR, SentinelOne, Microsoft Sentinel, KQL, Splunk, Elastic SIEM</p>
-                    </div>
-                    <div class="skill-group">
-                        <h3 class="skill-heading">SYSTEMS &amp; ENDPOINT ADMIN</h3>
-                        <p class="skill-list">Entra ID, Active Directory, Microsoft Intune, Datto RMM, Exchange, Proxmox VE</p>
-                    </div>
-                    <div class="skill-group">
-                        <h3 class="skill-heading">NETWORKING &amp; INFRASTRUCTURE</h3>
-                        <p class="skill-list">Cloudflare Tunnels, Traefik, CrowdSec, Tailscale, AdGuard Home, Docker Compose, Linux, SOPS + age, Restic</p>
+                <div class="stop-title">
+                    <span class="section-kicker">Capabilities · 1 of 2</span>
+                    <h2 class="section-big-title">SKILLS</h2>
+                </div>
+                <div class="stop-body">
+                    <div class="skills-grid">
+                        <div class="skill-group">
+                            <h3 class="skill-heading">DETECTION AND EDR</h3>
+                            <p class="skill-list">FortiEDR, SentinelOne, Microsoft Sentinel, KQL, Splunk, Elastic SIEM</p>
+                        </div>
+                        <div class="skill-group">
+                            <h3 class="skill-heading">SYSTEMS &amp; ENDPOINT ADMIN</h3>
+                            <p class="skill-list">Entra ID, Active Directory, Microsoft Intune, Datto RMM, Exchange, Proxmox VE</p>
+                        </div>
+                        <div class="skill-group">
+                            <h3 class="skill-heading">NETWORKING &amp; INFRASTRUCTURE</h3>
+                            <p class="skill-list">Cloudflare Tunnels, Traefik, CrowdSec, Tailscale, AdGuard Home, Docker Compose, Linux, SOPS + age, Restic</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1067,42 +1213,45 @@
                  data-label="Education and certs" data-group="skills"
                  data-shape="medal" data-color="#ffd166">
             <div class="section-content">
-                <span class="section-kicker">Capabilities · 2 of 2</span>
-                <h2>EDUCATION AND CERTS</h2>
-
-                <h3 class="metric" style="margin-top: 8px;">EDUCATION</h3>
-                <div class="creds-list">
-                    <div class="cred-row">
-                        <span class="cred-name">MSc, Cybersecurity (in progress)</span>
-                        <span class="cred-issuer">Simon Fraser University</span>
-                    </div>
-                    <div class="cred-row">
-                        <span class="cred-name">BCIS, Major in Cybersecurity</span>
-                        <span class="cred-issuer">University of the Fraser Valley, 2024</span>
-                    </div>
+                <div class="stop-title">
+                    <span class="section-kicker">Capabilities · 2 of 2</span>
+                    <h2>EDUCATION AND CERTS</h2>
                 </div>
+                <div class="stop-body">
+                    <h3 class="metric" style="margin-top: 8px;">EDUCATION</h3>
+                    <div class="creds-list">
+                        <div class="cred-row">
+                            <span class="cred-name">MSc, Cybersecurity (in progress)</span>
+                            <span class="cred-issuer">Simon Fraser University</span>
+                        </div>
+                        <div class="cred-row">
+                            <span class="cred-name">BCIS, Major in Cybersecurity</span>
+                            <span class="cred-issuer">University of the Fraser Valley, 2024</span>
+                        </div>
+                    </div>
 
-                <h3 class="metric" style="margin-top: 28px;">CERTIFICATIONS</h3>
-                <div class="creds-list">
-                    <div class="cred-row">
-                        <span class="cred-name">CompTIA Security+</span>
-                        <span class="cred-issuer">CompTIA</span>
-                    </div>
-                    <div class="cred-row">
-                        <span class="cred-name">Cisco Certified Network Associate (CCNA)</span>
-                        <span class="cred-issuer">Cisco</span>
-                    </div>
-                    <div class="cred-row">
-                        <span class="cred-name">Cisco Certified Technician (CCT)</span>
-                        <span class="cred-issuer">Cisco</span>
-                    </div>
-                    <div class="cred-row">
-                        <span class="cred-name">Google Cybersecurity Professional</span>
-                        <span class="cred-issuer">Google</span>
-                    </div>
-                    <div class="cred-row">
-                        <span class="cred-name">Cybersecurity Strategy &amp; Risk</span>
-                        <span class="cred-issuer">University of British Columbia</span>
+                    <h3 class="metric" style="margin-top: 28px;">CERTIFICATIONS</h3>
+                    <div class="creds-list">
+                        <div class="cred-row">
+                            <span class="cred-name">CompTIA Security+</span>
+                            <span class="cred-issuer">CompTIA</span>
+                        </div>
+                        <div class="cred-row">
+                            <span class="cred-name">Cisco Certified Network Associate (CCNA)</span>
+                            <span class="cred-issuer">Cisco</span>
+                        </div>
+                        <div class="cred-row">
+                            <span class="cred-name">Cisco Certified Technician (CCT)</span>
+                            <span class="cred-issuer">Cisco</span>
+                        </div>
+                        <div class="cred-row">
+                            <span class="cred-name">Google Cybersecurity Professional</span>
+                            <span class="cred-issuer">Google</span>
+                        </div>
+                        <div class="cred-row">
+                            <span class="cred-name">Cybersecurity Strategy &amp; Risk</span>
+                            <span class="cred-issuer">University of British Columbia</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1113,18 +1262,22 @@
                  data-label="Off the clock" data-group="personal"
                  data-shape="mountains" data-color="#ff8a4c">
             <div class="section-content">
-                <span class="section-kicker">Off the clock</span>
-                <h2>TRAILS AND FILM</h2>
-                <ul class="role-bullets">
-                    <li>
-                        <h3 class="metric">TRAILS</h3>
-                        Hiking and trail running in the BC backcountry. Long climbs are where I learned to pace a hard problem instead of sprinting at it.
-                    </li>
-                    <li>
-                        <h3 class="metric">35MM FILM</h3>
-                        A roll gives you 36 frames and no preview, so every shot gets checked before it's taken. I treat changes to production the same way.
-                    </li>
-                </ul>
+                <div class="stop-title">
+                    <span class="section-kicker">Off the clock</span>
+                    <h2>TRAILS AND FILM</h2>
+                </div>
+                <div class="stop-body">
+                    <ul class="role-bullets">
+                        <li>
+                            <h3 class="metric">TRAILS</h3>
+                            Hiking and trail running in the BC backcountry. Long climbs are where I learned to pace a hard problem instead of sprinting at it.
+                        </li>
+                        <li>
+                            <h3 class="metric">35MM FILM</h3>
+                            A roll gives you 36 frames and no preview, so every shot gets checked before it's taken. I treat changes to production the same way.
+                        </li>
+                    </ul>
+                </div>
             </div>
         </section>
 
@@ -1133,41 +1286,45 @@
                  data-label="Contact" data-group="contact"
                  data-shape="envelope" data-color="#ff5a1f">
             <div class="section-content">
-                <span class="section-kicker">Contact</span>
-                <h2>GET IN TOUCH</h2>
-                <div class="section-p">
-                    Happy to talk endpoint security, detection engineering, or homelab builds.
+                <div class="stop-title">
+                    <span class="section-kicker">Contact</span>
+                    <h2>GET IN TOUCH</h2>
                 </div>
+                <div class="stop-body">
+                    <div class="section-p">
+                        Happy to talk endpoint security, detection engineering, or homelab builds.
+                    </div>
 
-                <form class="contact-form" id="contact-form" action="https://formsubmit.co/59add3f454616cd68040185e2874e3e7" method="POST">
-                    <input type="hidden" name="_next" value="https://tanishr.dev/#contact">
-                    <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
-                    <input type="hidden" name="_subject" value="Portfolio contact">
+                    <form class="contact-form" id="contact-form" action="https://formsubmit.co/59add3f454616cd68040185e2874e3e7" method="POST">
+                        <input type="hidden" name="_next" value="https://tanishr.dev/#contact">
+                        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+                        <input type="hidden" name="_subject" value="Portfolio contact">
 
-                    <label for="cf-name" class="sr-only">Name</label>
-                    <input type="text" id="cf-name" name="name" placeholder="Your name" required autocomplete="name">
+                        <label for="cf-name" class="sr-only">Name</label>
+                        <input type="text" id="cf-name" name="name" placeholder="Your name" required autocomplete="name">
 
-                    <label for="cf-email" class="sr-only">Email address</label>
-                    <input type="email" id="cf-email" name="email" placeholder="Your email" required autocomplete="email">
+                        <label for="cf-email" class="sr-only">Email address</label>
+                        <input type="email" id="cf-email" name="email" placeholder="Your email" required autocomplete="email">
 
-                    <label for="cf-message" class="sr-only">Message details</label>
-                    <textarea id="cf-message" name="message" placeholder="Message details" required></textarea>
+                        <label for="cf-message" class="sr-only">Message details</label>
+                        <textarea id="cf-message" name="message" placeholder="Message details" required></textarea>
 
-                    <button type="submit" class="btn">SEND MESSAGE</button>
-                    <p class="form-status" role="status" aria-live="polite"></p>
-                </form>
+                        <button type="submit" class="btn">SEND MESSAGE</button>
+                        <p class="form-status" role="status" aria-live="polite"></p>
+                    </form>
 
-                <div class="btn-group" style="margin-top: 24px;">
-                    <a href="https://www.linkedin.com/in/tanish-rathore" target="_blank" rel="noopener" class="btn btn--ghost">
-                        LinkedIn ↗
-                    </a>
-                    <a href="https://github.com/ogscriptkiddie" target="_blank" rel="noopener" class="btn btn--ghost">
-                        GitHub ↗
-                    </a>
-                </div>
+                    <div class="btn-group" style="margin-top: 24px;">
+                        <a href="https://www.linkedin.com/in/tanish-rathore" target="_blank" rel="noopener" class="btn btn--ghost">
+                            LinkedIn ↗
+                        </a>
+                        <a href="https://github.com/ogscriptkiddie" target="_blank" rel="noopener" class="btn btn--ghost">
+                            GitHub ↗
+                        </a>
+                    </div>
 
-                <div class="contact-footer">
-                    © 2026 Tanish Rathore
+                    <div class="contact-footer">
+                        © 2026 Tanish Rathore
+                    </div>
                 </div>
             </div>
         </section>
@@ -1192,48 +1349,79 @@
 
         function layoutShape(animateIt = false) {
             if (!webGlReady || !morphPoints) return;
+            const panel = panels[index];
+            if (!panel) return;
             const w = window.innerWidth, h = window.innerHeight;
             const halfH = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * camera.position.z;
             const halfW = halfH * camera.aspect;
             const unit = (2 * halfW) / w;                           // world units per CSS pixel at z = 0
 
-            // Where the text column starts
-            const content = panels[index] && panels[index].querySelector('.section-content');
-            const colLeft = content ? content.getBoundingClientRect().left : w * 0.5;
-
+            const content = panel.querySelector('.section-content');
             const GAP = 52;                                          // clear space between shape and text
             const regionL = w * 0.035;
-            const regionR = colLeft - GAP;
-            const freeW = regionR - regionL;
+            const sideColLeft = w > 768 ? (w * 0.93 - Math.min(600, w * 0.86)) : 0;
+            const sideFreeW = sideColLeft - GAP - regionL;
 
             // Section lead stops start bigger, then shrink on subsequent stops
             const isLead = (index === 0 || index === 1 || index === 4 || index === 7 || index === 8 || index === 10 || index === 11);
             const maxScale = isLead ? 1.28 : 1.05;
 
+            const prevMode = layoutMode;
+            layoutMode = (w > 768 && sideFreeW >= 300) ? 'side' : 'stacked';
+            document.documentElement.classList.toggle('stacked', layoutMode === 'stacked');
+            if (prevMode !== layoutMode && layoutMode === 'stacked' && stepped) {
+                setPhaseClass(panel, phase);
+            }
+
             let x, y, s;
-            if (freeW >= 300) {
-                layoutMode = 'side';
-                const freeH = h - 50 - 50;                             // full vertical window height with top nav removed
+            const single = panel.dataset.phases === '1';
+
+            if (layoutMode === 'side') {
+                const colLeft = content ? content.getBoundingClientRect().left : sideColLeft;
+                const regionR = colLeft - GAP;
+                const freeW = regionR - regionL;
+                const freeH = h - 100;                               // full vertical window height with top nav removed
                 s = Math.min(maxScale, (freeW * unit) / SHAPE_EXTENT, (freeH * unit) / SHAPE_EXTENT);
                 x = ((regionL + regionR) / 2) * unit - halfW;
                 y = 0;
-            } else {
-                layoutMode = 'stacked';
-                const bandTop = 20, bandBottom = h * 0.36;
-                const bandH = bandBottom - bandTop;
-                s = Math.min(isLead ? 1.22 : 1.05, (bandH * unit) / SHAPE_EXTENT, (w * 0.85 * unit) / SHAPE_EXTENT);
+            } else if (single) {
+                // Intro: band across the top
+                const bandTop = 16, bandBottom = h * 0.28;
+                s = Math.min(1, ((bandBottom - bandTop) * unit) / SHAPE_EXTENT, (w * 0.8 * unit) / SHAPE_EXTENT);
                 x = 0;
                 y = halfH - ((bandTop + bandBottom) / 2) * unit;
+            } else if (phase === 0) {
+                // Cover: large, centred in the area above the title
+                const top = 32, bottom = h * 0.55;
+                const cap = isLead ? 0.86 : 0.72;
+                s = Math.min(1, ((bottom - top) * cap * unit) / SHAPE_EXTENT, (w * cap * unit) / SHAPE_EXTENT);
+                x = 0;
+                y = halfH - ((top + bottom) / 2) * unit;
+            } else {
+                // Detail: 64px box in the top-left corner, beside the title
+                const BOX = 64;
+                const TOP = parseFloat(getComputedStyle(panel).paddingTop) || 28;
+                const left = content ? content.getBoundingClientRect().left : (parseFloat(getComputedStyle(panel).paddingLeft) || 20);
+                s = (BOX * unit) / SHAPE_EXTENT;
+                x = (left + BOX / 2) * unit - halfW;
+                y = halfH - (TOP + BOX / 2) * unit;
             }
 
-            document.documentElement.classList.toggle('stacked', layoutMode === 'stacked');
+            const basePoint = isMobile ? 2.2 : 2.8;
+            const small = (layoutMode === 'stacked' && !single && phase === 1) || s < 0.16;
+            const pointSize = small ? 1.1 : basePoint;
+            const alpha = small ? 0.22 : 0.85;
 
             if (animateIt && window.gsap && !reduceMotion) {
                 gsap.to(morphPoints.position, { x, y, z: 0, duration: 0.65, ease: 'power2.out', overwrite: true });
                 gsap.to(morphPoints.scale, { x: s, y: s, z: s, duration: 0.65, ease: 'power2.out', overwrite: true });
+                gsap.to(morphUniforms.uPointSize, { value: pointSize, duration: 0.6, overwrite: true });
+                gsap.to(morphUniforms.uAlpha, { value: alpha, duration: 0.6, overwrite: true });
             } else {
                 morphPoints.position.set(x, y, 0);
                 morphPoints.scale.setScalar(s);
+                morphUniforms.uPointSize.value = pointSize;
+                morphUniforms.uAlpha.value = alpha;
             }
         }
 
@@ -1245,7 +1433,8 @@
             morphRatio: { value: 0.0 },
             uBaseColor: { value: new THREE.Color('#ff5a1f') },
             uAccentColor: { value: new THREE.Color('#ffffff') },
-            uPointSize: { value: isMobile ? 2.2 : 2.8 }
+            uPointSize: { value: isMobile ? 2.2 : 2.8 },
+            uAlpha: { value: 0.85 }
         };
 
         const shapePositions = {};
@@ -1477,6 +1666,7 @@
                     uniform vec3 uBaseColor;
                     uniform vec3 uAccentColor;
                     uniform float morphRatio;
+                    uniform float uAlpha;
 
                     void main() {
                         float dist = distance(gl_PointCoord, vec2(0.5, 0.5));
@@ -1484,7 +1674,7 @@
                         float alpha = smoothstep(0.5, 0.15, dist);
                         float flash = sin(morphRatio * 3.14159265);
                         vec3 finalColor = mix(uBaseColor, uAccentColor, flash * 0.5);
-                        gl_FragColor = vec4(finalColor, alpha * 0.85);
+                        gl_FragColor = vec4(finalColor, alpha * uAlpha);
                     }
                 `;
 
@@ -1576,8 +1766,19 @@
         const panels = Array.from(document.querySelectorAll('.panel'));
         const counter = document.querySelector('.step-counter');
         let index = 0;
+        let phase = 0;     // stacked layout only: 0 = cover, 1 = detail
         let locked = false;
         let stepped = false;
+
+        function twoPhase(i = index) {
+            return layoutMode === 'stacked' && panels[i].dataset.phases !== '1';
+        }
+
+        function setPhaseClass(panel, p) {
+            const two = panel.dataset.phases !== '1';
+            panel.classList.toggle('phase-cover', two && p === 0);
+            panel.classList.toggle('phase-detail', two && p === 1);
+        }
 
         /* ---- Scene: shape + colour for a stop (used in both modes) ---- */
         function applyScene(i) {
@@ -1608,8 +1809,53 @@
             }
         }
 
+        /* ---- Switching between cover and detail (stacked layout) ---- */
+        function setPhase(p) {
+            const panel = panels[index];
+            const title = panel.querySelector('.stop-title');
+            const body = panel.querySelector('.stop-body');
+
+            const apply = () => {
+                phase = p;
+                setPhaseClass(panel, p);
+                panel.scrollTop = 0;
+                const canvas = document.getElementById('three-canvas-container');
+                if (canvas) canvas.style.opacity = '1';
+                layoutShape(true);                 // shape grows or shrinks to its new place
+            };
+
+            if (!window.gsap || reduceMotion) { apply(); return; }
+
+            locked = true;
+            let finished = false;
+            const done = () => {
+                if (finished) return;
+                finished = true;
+                clearTimeout(failsafe);
+                gsap.set([title, body], { clearProps: 'opacity,transform' });
+                locked = false;
+            };
+            const failsafe = setTimeout(done, 1200);
+
+            gsap.timeline({ onComplete: done })
+                .to([title, body], { opacity: 0, duration: 0.18, ease: 'power1.in' })
+                .add(apply)
+                .fromTo(title, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }, '+=0.12')
+                .fromTo(body,  { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: 'power3.out' }, '<0.08');
+        }
+
+        /* ---- One function for directional stepping ---- */
+        function step(dir) {
+            if (locked) return;
+            if (twoPhase()) {
+                if (dir > 0 && phase === 0) return setPhase(1);     // cover -> detail
+                if (dir < 0 && phase === 1) return setPhase(0);     // detail -> cover
+            }
+            goTo(index + dir, dir > 0 ? 0 : 1);                     // forward lands on a cover, back lands on a detail
+        }
+
         /* ---- Step transition ---- */
-        function goTo(next) {
+        function goTo(next, landPhase = 0) {
             if (locked || next === index || next < 0 || next >= panels.length) return;
             locked = true;
 
@@ -1622,6 +1868,8 @@
             to.scrollTop = 0;
             to.classList.add('is-active');
             to.inert = false;
+            phase = to.dataset.phases === '1' ? 0 : landPhase;
+            setPhaseClass(to, phase);
 
             index = next;
             applyScene(next);
@@ -1633,7 +1881,7 @@
                 if (!locked) return;
                 clearTimeout(lockTimer);
                 if (tl) tl.kill();
-                from.classList.remove('is-active');
+                from.classList.remove('is-active', 'phase-cover', 'phase-detail');
                 from.inert = true;
                 if (window.gsap) gsap.set([fromC, toC], { clearProps: 'opacity,transform' });
                 const h = to.querySelector('h1, h2');
@@ -1708,7 +1956,7 @@
                 acc = 0;
                 coasting = true;
                 coastDir = dir;
-                goTo(index + dir);
+                step(dir);
             }
         }
 
@@ -1723,8 +1971,8 @@
             if (locked) return;
             const dy = e.changedTouches[0].clientY - touchY;
             if (Math.abs(dy) < 50) return;
-            if (dy < 0 && touchBottom) goTo(index + 1);
-            else if (dy > 0 && touchTop) goTo(index - 1);
+            if (dy < 0 && touchBottom) step(1);
+            else if (dy > 0 && touchTop) step(-1);
         }
 
         /* ---- Input: keyboard ---- */
@@ -1733,15 +1981,11 @@
             const typing = t.matches('input, textarea, select');
             const onControl = t.matches('button, a');
             if (typing || e.altKey || e.ctrlKey || e.metaKey) return;
-            let next = null;
-            if (e.key === 'ArrowDown' || e.key === 'PageDown') next = index + 1;
-            else if (e.key === 'ArrowUp' || e.key === 'PageUp') next = index - 1;
-            else if (e.key === ' ' && !onControl) next = index + (e.shiftKey ? -1 : 1);
-            else if (e.key === 'Home') next = 0;
-            else if (e.key === 'End') next = panels.length - 1;
-            if (next === null) return;
-            e.preventDefault();
-            goTo(next);
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); step(1); return; }
+            if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); step(-1); return; }
+            if (e.key === ' ' && !onControl) { e.preventDefault(); step(e.shiftKey ? -1 : 1); return; }
+            if (e.key === 'Home') { e.preventDefault(); goTo(0); return; }
+            if (e.key === 'End') { e.preventDefault(); goTo(panels.length - 1); }
         }
 
         /* ---- Links, rail, deep links ---- */
@@ -1813,6 +2057,8 @@
                 p.inert = i !== start;
             });
             index = start;
+            phase = 0;
+            setPhaseClass(panels[start], 0);
             applyScene(start);
             window.addEventListener('wheel', onWheel, { passive: false });
             window.addEventListener('touchstart', onTouchStart, { passive: true });
@@ -1844,7 +2090,8 @@
         panels.forEach(p => p.addEventListener('scroll', () => {
             if (p !== panels[index]) return;
             const canvas = document.getElementById('three-canvas-container');
-            if (canvas) canvas.style.opacity = layoutMode === 'stacked' ? String(Math.max(0, 1 - p.scrollTop / 120)) : '1';
+            const fadeOver = phase === 1 ? 40 : 120;
+            if (canvas) canvas.style.opacity = layoutMode === 'stacked' ? String(Math.max(0, 1 - p.scrollTop / fadeOver)) : '1';
         }, { passive: true }));
 
         // Declare clock before calling init() (Bug fix E1)
@@ -1880,13 +2127,15 @@
                 mouse.x += (mouseTarget.x - mouse.x) * 0.05;
                 mouse.y += (mouseTarget.y - mouse.y) * 0.05;
 
-                // Slow sway, plus continuous spin only on globe
+                // Slow sway (damped on small corner icon), plus continuous spin only on globe
+                const swayScale = (layoutMode === 'stacked' && phase === 1 && panels[index]?.dataset.phases !== '1') ? 0.4 : 1;
+                const swayY = Math.sin(elapsed * 0.35) * 0.35 * swayScale;
                 if (targetShapeKey === 'globe') {
-                    morphPoints.rotation.y = elapsed * 0.12 + Math.sin(elapsed * 0.35) * 0.35 + mouse.x * 0.12;
+                    morphPoints.rotation.y = elapsed * 0.12 + swayY + mouse.x * 0.12;
                 } else {
-                    morphPoints.rotation.y = Math.sin(elapsed * 0.35) * 0.35 + mouse.x * 0.12;
+                    morphPoints.rotation.y = swayY + mouse.x * 0.12;
                 }
-                morphPoints.rotation.x = Math.sin(elapsed * 0.22) * 0.08 - mouse.y * 0.1;
+                morphPoints.rotation.x = Math.sin(elapsed * 0.22) * 0.08 * swayScale - mouse.y * 0.1;
             }
 
             if (renderer && scene && camera) {
